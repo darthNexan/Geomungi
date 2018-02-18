@@ -100,10 +100,10 @@ public class BasicMiniGameScreen implements Screen {
 //            points.add(new Vector2(x,y));
 //        }
 
-        //points=parallelPoints();
+        //points=generateParallelPoints();
        // points = generateParallelogram(90,50f,50f);
-        points = generateKitePoints(15,25);
-
+        //points = generateKitePoints(15,25);
+        points = generateTrapezium(20,45,15);
     }
     @Override
     public void show() {
@@ -334,7 +334,7 @@ public class BasicMiniGameScreen implements Screen {
         return new BasicGameType();
     }
 
-    private Vector<Vector2> parallelPoints(){
+    private Vector<Vector2> generateParallelPoints(){
         int i = 0;
         Random random = GameInfo.random;
         Vector<Vector2> vec = new Vector<Vector2>();
@@ -482,6 +482,68 @@ public class BasicMiniGameScreen implements Screen {
 
         return vector2s;
 
+    }
+
+
+    private Vector<Vector2> generateTrapezium (float a, float b, float height) {
+
+        Vector<Vector2> v = new Vector<Vector2>();
+
+
+        Vector2 topLine = new Vector2(a,0);
+
+        Vector2 bottomLine = new Vector2(b,0);
+
+        Vector2 h = new Vector2(0, height);
+        Vector2 temp0 = new Vector2(0,0);
+        Vector2 temp1 = new Vector2(0,0);
+        Vector2 temp2 = new Vector2(0f,0f);
+        Vector2 temp3 = new Vector2(0f,0f);
+
+
+        do {
+            float angleToUse = 45*GameInfo.random.nextFloat();
+
+            float x = GameInfo.random.nextInt((int)GameInfo.CAMERA_WIDTH);
+            float y = GameInfo.random.nextInt( (int)GameInfo.CAMERA_HEIGHT);
+            topLine.x=a;
+            topLine.y=0;
+
+            bottomLine.x = b;
+            bottomLine.y =0;
+
+            h.x=0;
+            h.y=height;
+            h.rotate(angleToUse);
+
+            temp0.x=x;
+            temp0.y=y;
+
+            temp1.x=x;
+            temp1.y=y;
+
+            temp2.x=0;
+            temp2.y=0;
+
+            temp3.x=0;
+            temp3.y=0;
+
+
+
+            temp1.add(topLine);
+
+            temp2.add(h).add(temp0);
+
+            temp3.add(temp2).add(bottomLine);
+        }while (!checkVisibility(temp0) || !checkVisibility(temp1) ||
+                !checkVisibility(temp2) || !checkVisibility(temp3));
+
+
+        v.add(temp0);
+        v.add(temp1);
+        v.add(temp2);
+        v.add(temp3);
+            return v;
     }
 
     private Vector2 genVector(){

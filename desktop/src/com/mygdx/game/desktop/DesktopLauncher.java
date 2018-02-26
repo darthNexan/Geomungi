@@ -2,7 +2,7 @@ package com.mygdx.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.pablo.game.GameInfo;
+import com.pablo.gameutils.GameInfo;
 import com.pablo.game.MyGdxGame;
 
 public class DesktopLauncher {

@@ -20,7 +20,7 @@ public class MyGdxGame extends Game {
     @Override
 	public void create () {
 		batch = new SpriteBatch();
-		camera = new OrthographicCamera(GameInfo.CAMERA_WIDTH,GameInfo.CAMERA_HEIGHT);
+		camera = new OrthographicCamera(com.pablo.gameutils.GameInfo.CAMERA_WIDTH, com.pablo.gameutils.GameInfo.CAMERA_HEIGHT);
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 

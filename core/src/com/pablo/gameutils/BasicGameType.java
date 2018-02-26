@@ -1,7 +1,5 @@
 package com.pablo.gameutils;
 
-import com.pablo.game.GameInfo;
-
 import java.util.Random;
 
 /**
@@ -12,10 +10,10 @@ public class BasicGameType {
 
 
 
-    public int gameCategory;//General eg parallel lines, plane shape, angle, etc.
-    public int shapeType; //type of triangle, quadrilateral, pentagon, hexagon, septagon,octagon,nonagon, decagon
-    public int angleType;  //obtuse, acute, right angle
-    public int specializedCategory; //for use with scalene, equilateral, isosceles, right angle, acute and obtuse triangles
+    int gameCategory;//General eg parallel lines, plane shape, angle, etc.
+    int shapeType; //type of triangle, quadrilateral, pentagon, hexagon, septagon,octagon,nonagon, decagon
+    int angleType;  //obtuse, acute, right angle
+    int specializedCategory; //for use with scalene, equilateral, isosceles, right angle, acute and obtuse triangles
     //also for types of quadrilaterals parallelogram, rhombus, square, trapezoid, kite, rectangle
 
     /**
@@ -31,7 +29,7 @@ public class BasicGameType {
         gameCategory = random.nextInt(3);
 
         if(gameCategory == 1){
-            shapeType = random.nextInt(8);
+            shapeType = random.nextInt(8) + 3;
             if (shapeType == 0 || shapeType ==1){
                 specializedCategory = random.nextInt(6);
             }
@@ -42,6 +40,12 @@ public class BasicGameType {
 
     }//BasicGameType Constructor
 
+    public BasicGameType(int gameCategory, int shapeType, int angleType, int specializedCategory) {
+        this.gameCategory = gameCategory;
+        this.shapeType = shapeType;
+        this.angleType = angleType;
+        this.specializedCategory = specializedCategory;
+    }
 
     public boolean isParallel(){
         return gameCategory == 0;
@@ -72,35 +76,35 @@ public class BasicGameType {
 
 
     public boolean isTriangle(){
-        return shapeType==0;
-    }
-
-    public boolean isQuad(){
-        return shapeType==1;
-    }
-
-    public boolean isPentagon(){
-        return shapeType==2;
-    }
-
-    public boolean isHexagon(){
         return shapeType==3;
     }
 
-    public boolean isSeptagon(){
+    public boolean isQuad(){
         return shapeType==4;
     }
 
-    public boolean isOctagon(){
+    public boolean isPentagon(){
         return shapeType==5;
     }
 
-    public boolean isNonagon(){
+    public boolean isHexagon(){
         return shapeType==6;
     }
 
-    public boolean isDecagon(){
+    public boolean isSeptagon(){
         return shapeType==7;
+    }
+
+    public boolean isOctagon(){
+        return shapeType==8;
+    }
+
+    public boolean isNonagon(){
+        return shapeType==9;
+    }
+
+    public boolean isDecagon(){
+        return shapeType==10;
     }
 
 

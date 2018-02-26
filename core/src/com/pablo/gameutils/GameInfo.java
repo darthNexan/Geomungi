@@ -1,4 +1,4 @@
-package com.pablo.game;
+package com.pablo.gameutils;
 
 import java.util.Random;
 

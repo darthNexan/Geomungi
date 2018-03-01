@@ -14,4 +14,9 @@ public class Tuple2<X,Y> {
         this.x1 = x1;
         this.x2 = x2;
     }
+
+    @Override
+    public String toString() {
+        return "("+ x1.toString() + ", "+ x2.toString() +")";
+    }
 }

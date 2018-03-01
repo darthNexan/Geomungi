@@ -2,9 +2,11 @@ package com.pablo.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.pablo.gameutils.GameInfo;
 import com.pablo.gameutils.UISprite;
+import com.pablo.screen.BasicMiniGameScreen;
 
 import static java.lang.Math.abs;
 
@@ -16,8 +18,10 @@ public class BasicsInput extends InputAdapter {
 
     private Vector2 pos;
     private UISprite uiSprite;
-    public BasicsInput(Vector2 pos, UISprite uiSprite){
-        this.uiSprite = uiSprite;
+    private UISprite uiSprite2;
+    public BasicsInput(Vector2 pos, BasicMiniGameScreen screen){
+        this.uiSprite =  screen.pauseButtonSprite;
+        this.uiSprite2 = screen.checkButton;
         this.pos = pos;
     }
 
@@ -28,9 +32,10 @@ public class BasicsInput extends InputAdapter {
 
         float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
         float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
-        uiSprite.setClicked(newX, newY);
+        boolean res0 = uiSprite.setClicked(newX, newY);
+        boolean res1 =uiSprite2.setClicked(newX,newY);
 
-        if (!uiSprite.isClicked()) {
+        if (!res0 && !res1) {
             pos.x = newX;
             pos.y = newY ;
         }

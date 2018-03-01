@@ -20,7 +20,10 @@ public class UISprite extends Sprite {
      * @return
      */
     public boolean isClicked(){
-        return clicked;
+        boolean temp = clicked;
+        reset();
+
+        return temp;
     }
 
     /**
@@ -28,9 +31,11 @@ public class UISprite extends Sprite {
      * @param x
      * @param y
      */
-    public void setClicked(float x, float y){
-        System.out.println("Ran");
+    public boolean setClicked(float x, float y){
+
         clicked = getBoundingRectangle().contains(x,y);
+
+        return clicked;
     }
 
     public void reset(){

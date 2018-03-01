@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.pablo.gameutils.GameInfo;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.BasicGameType;
+import com.pablo.gameutils.ShapeGeneration;
 import com.pablo.gameutils.ShapeIdentification;
 import com.pablo.gameutils.Tuple2;
 import com.pablo.gameutils.UISprite;
@@ -41,8 +42,15 @@ public class BasicMiniGameScreen implements Screen {
     private boolean isComplete = false;
     private BasicGameType basicGameType;
 
-    private UISprite checkButton;
-    private UISprite pauseButtonSprite;
+    public UISprite checkButton;
+    public UISprite pauseButtonSprite;
+
+    public UISprite tryAgainButton;
+    public UISprite quitButton;
+    public UISprite nextButton;
+
+    public boolean endScreen;
+
 
     public BasicMiniGameScreen(MyGdxGame game){
         this.game=game;
@@ -66,7 +74,7 @@ public class BasicMiniGameScreen implements Screen {
         selectedPoints = new Vector<Vector<Vector2>>();
         selectedPoints.add(new Vector<Vector2>());
         currentPoint = new Vector2(-1,-1);
-        Gdx.input.setInputProcessor(new BasicsInput(currentPoint, pauseButtonSprite));
+        Gdx.input.setInputProcessor(new BasicsInput(currentPoint, this));
         init();
 
     }//Constructor
@@ -84,13 +92,17 @@ public class BasicMiniGameScreen implements Screen {
         bgSprite.setSize(GameInfo.CAMERA_WIDTH, GameInfo.CAMERA_HEIGHT);
         bgSprite.setPosition(0,0);
         pauseButtonSprite.setPosition( 8.5f * GameInfo.CAMERA_WIDTH/10, 9.5f * GameInfo.CAMERA_HEIGHT /10);
+
+        this.checkButton = new UISprite(new Texture("Pictures/tickNoBg.PNG"));
+        this.checkButton.setPosition(0.5f * GameInfo.CAMERA_WIDTH/10, 9.5f * GameInfo.CAMERA_HEIGHT/10);
+        this.checkButton.setSize(GameInfo.CAMERA_WIDTH/8 , (GameInfo.CAMERA_WIDTH/8) * ratio);
     }//SetUpSprite
 
     /**
      * Sets up new game
      */
     private void init(){
-        basicGameType = new BasicGameType(1,0,0,0);
+        basicGameType = new BasicGameType(1,3,0,5);
 
 
         points.clear();
@@ -104,81 +116,95 @@ public class BasicMiniGameScreen implements Screen {
 
         currentPoint.x=-1;
         currentPoint.y=-1;
-//        for (int i = 0; i < 10; i++) {
-//            float x = (float) rand.nextInt(maxX)/100f + 1;
-//            float y = (float)rand.nextInt(maxY)/100f + 1;
-//
-//            points.add(new Vector2(x,y));
-//        }
 
-        //points=generateParallelPoints();
-       // points = generateParallelogram(90,50f,50f);
-        //points = generateKitePoints(15,25);
-       // points = generateTrapezium(20,45,15);
-        points = generateTriangle(20f, 20f, 110);
+        points = ShapeGeneration.generateTriangle(25f,60f,90f);
     }
     @Override
     public void show() {
 
     }
 
-    /**
-     * update function performs computation based on the rules of the game.
-     * If an angle needs to be made only three points need to be selected.
-     * If a shape needs to be made the shape needs to be connected
-     */
-    @SuppressWarnings({"ConstantConditions", "StatementWithEmptyBody"})
-    private void update(){
-
-
-
-        updateCurrentPoints();
-
-       // System.out.println(basicGameType.isParallel());
-
-
-       // testSolution();
-        if( testSolution()){
-
-            Gdx.input.vibrate(20000);
-            init();
-
-
-        }
-        else if(isComplete){
-
-
-            init();
-        }
-        else {
-
-        }
-
-    }
 
     @SuppressWarnings("ConstantConditions")
     private boolean testSolution(){
 
+        boolean res = false;
+        System.out.println(selectedPoints.size());
+        if (basicGameType.isParallel() && selectedPoints.size() == 3 && basicGameType.isParallel()){
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.T)){
-            Vector<Vector2> v = ShapeIdentification.compress(selectedPoints).x1;
-            System.out.println(v.size());
+            System.out.println(selectedPoints.get(0).size());
+            System.out.println(selectedPoints.get(1).size());
+            System.out.println(selectedPoints.get(2).size());
+            System.out.println(basicGameType.isParallel());
+            res = selectedPoints.get(0).size()==2 && selectedPoints.get(1).size() == 2 &&
+                    selectedPoints.get(2).isEmpty() &&
+                    ShapeIdentification.identifyParallelLines(selectedPoints.firstElement(), selectedPoints.get(1));
+
+            System.out.println(res);
+
+
         }
-        if(basicGameType.isParallel() && selectedPoints.size() >= 2 && selectedPoints.get(1).size() >1){
-            Vector<Vector2> temp0 = selectedPoints.get(0);
-            Vector<Vector2> temp1 = selectedPoints.get(1);
+        else if(basicGameType.isAngle()){
+            boolean res0 = selectedPoints.firstElement().size() == 3;
+            if (res0) {
+                float angleSize = ShapeIdentification.calculateAngle(selectedPoints.firstElement().get(0),
+                        selectedPoints.firstElement().get(1), selectedPoints.firstElement().get(2));
 
-            return isParallel(temp0.get(0), temp0.get(1),temp1.get(0), temp1.get(1));
+                //System.out.println(angleSize);
+                res = basicGameType.isAcute() ? angleSize < 90f : basicGameType.isObtuse() ? angleSize > 90f :
+                        angleSize == 90f;
+            }
+            System.out.println(res);
         }
+        else if (basicGameType.isShape()){
 
+            if (basicGameType.isTriangle()){
+                Tuple2<Boolean,Boolean> triangleRes=null;
+                if (basicGameType.isType0()){
+                    triangleRes = ShapeIdentification.triangleL(selectedPoints.firstElement(),
+                            ShapeIdentification.EQUILATERAL);
 
-        return false;
+                }
+                else if (basicGameType.isType1()){
+                    triangleRes = ShapeIdentification.triangleL(selectedPoints.firstElement(),
+                            ShapeIdentification.ISOSCELES);
+
+                }
+                else if (basicGameType.isType2()){
+                    triangleRes = ShapeIdentification.triangleL(selectedPoints.firstElement(),
+                            ShapeIdentification.SCALENE);
+                }
+                else if (basicGameType.isType3()){
+                    triangleRes = ShapeIdentification.triangleA(selectedPoints.firstElement(),
+                            ShapeIdentification.ACUTE);
+                }
+                else if (basicGameType.isType4()){
+                    triangleRes = ShapeIdentification.triangleA(selectedPoints.firstElement(),
+                            ShapeIdentification.OBTUSE);
+                }
+                else {
+                    triangleRes = ShapeIdentification.triangleA(selectedPoints.firstElement(),
+                            ShapeIdentification.RIGHT);
+                }
+
+                System.out.println(triangleRes);
+                res = triangleRes.x1 && triangleRes.x2;
+            }
+            else if (basicGameType.isQuad()){
+
+            }
+            else {
+
+            }
+
+        }
+        return res;
 
     }
 
     @Override
     public void render(float delta) {
-        update();
+        updateCurrentPoints();
         if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
             init();
         }
@@ -191,6 +217,7 @@ public class BasicMiniGameScreen implements Screen {
         batch.begin();
         bgSprite.draw(batch);
         pauseButtonSprite.draw(batch);
+        checkButton.draw(batch);
         batch.end();
 
         //render lines
@@ -234,7 +261,11 @@ public class BasicMiniGameScreen implements Screen {
 
 
         if (pauseButtonSprite.isClicked()){
-            System.out.println("Ran");
+            System.out.println("Touched pause button");
+        }
+        if (checkButton.isClicked() && !selectedPoints.isEmpty()){
+            System.out.println("Touched check answer button" );
+            testSolution();
         }
 
         line1.end();
@@ -656,4 +687,7 @@ public class BasicMiniGameScreen implements Screen {
 
         return vector2.x >1 && vector2.x<GameInfo.CAMERA_WIDTH && vector2.y >1 && vector2.y <GameInfo.CAMERA_HEIGHT ;
     }
+
+
+
 }//BasicsMiniGameScreen

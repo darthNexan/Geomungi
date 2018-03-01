@@ -1,0 +1,134 @@
+{
+  "Progress": [
+    {"Basic":0},
+    {"Trig":0}
+  ],
+  "Score":{"Basic":0,"Trig":0},
+  "GameMode":[
+    {
+      "Section":"Basic",
+      "Levels":[
+        { "category":0,
+          "shapeType":0,
+          "angleType":0,
+          "specializedCategory":0
+        },
+        { "category":2,
+          "shapeType":0,
+          "angleType":0,
+          "specializedCategory":0
+        },
+        { "category":2,
+          "shapeType":0,
+          "angleType":1,
+          "specializedCategory":0
+        },
+        { "category":2,
+          "shapeType":0,
+          "angleType":2,
+          "specializedCategory":0
+        },
+        { "category":1,
+          "shapeType":3,
+          "angleType":0,
+          "specializedCategory":0
+        },
+        { "category":1,
+          "shapeType":3,
+          "angleType":0,
+          "specializedCategory":1
+        },
+        { "category":1,
+          "shapeType":3,
+          "angleType":0,
+          "specializedCategory":2
+        },
+        { "category":1,
+          "shapeType":3,
+          "angleType":0,
+          "specializedCategory":3
+        },
+        { "category":1,
+          "shapeType":3,
+          "angleType":0,
+          "specializedCategory":4
+        },
+        { "category":1,
+          "shapeType":3,
+          "angleType":0,
+          "specializedCategory":5
+        },
+        { "category":1,
+          "shapeType":3,
+          "angleType":0,
+          "specializedCategory":6
+        },
+        { "category":1,
+          "shapeType":4,
+          "angleType":0,
+          "specializedCategory":0
+        },
+        { "category":1,
+          "shapeType":4,
+          "angleType":0,
+          "specializedCategory":1
+        },
+        { "category":1,
+          "shapeType":4,
+          "angleType":0,
+          "specializedCategory":2
+        },
+        { "category":1,
+          "shapeType":4,
+          "angleType":0,
+          "specializedCategory":3
+        },
+        { "category":1,
+          "shapeType":4,
+          "angleType":0,
+          "specializedCategory":4
+        },
+        { "category":1,
+          "shapeType":4,
+          "angleType":0,
+          "specializedCategory":5
+        },
+        { "category":1,
+          "shapeType":4,
+          "angleType":0,
+          "specializedCategory":6
+        },
+        { "category":1,
+          "shapeType":5,
+          "angleType":0,
+          "specializedCategory":0
+        },
+        { "category":1,
+          "shapeType":6,
+          "angleType":0,
+          "specializedCategory":0
+        },
+        { "category":1,
+          "shapeType":7,
+          "angleType":0,
+          "specializedCategory":0
+        },
+        { "category":1,
+          "shapeType":8,
+          "angleType":0,
+          "specializedCategory":0
+        },
+        { "category":1,
+          "shapeType":9,
+          "angleType":0,
+          "specializedCategory":0
+        },
+        { "category":1,
+          "shapeType":10,
+          "angleType":0,
+          "specializedCategory":0
+        }]
+    },
+    {}
+  ]
+}

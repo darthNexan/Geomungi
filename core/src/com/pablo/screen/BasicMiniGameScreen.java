@@ -117,7 +117,7 @@ public class BasicMiniGameScreen implements Screen {
         currentPoint.x=-1;
         currentPoint.y=-1;
 
-        points = ShapeGeneration.generateTriangle(25f,60f,90f);
+        points = ShapeGeneration.generateShape(10);
     }
     @Override
     public void show() {

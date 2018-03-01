@@ -341,9 +341,6 @@ public class ShapeGeneration {
             point1.y=0;
             point0.y=0;
 
-
-
-
             sideA.scl(a);
             sideA.rotate(angleToUse);
             sideB.scl(b);
@@ -353,9 +350,6 @@ public class ShapeGeneration {
 
             point0.add(initalPoint).add(sideA);
             point1.add(initalPoint).add(sideB);
-
-
-
 
         }while (!checkVisibility(point0) || !checkVisibility(point1) || !checkVisibility(initalPoint));
 

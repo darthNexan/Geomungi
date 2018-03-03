@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.pablo.gameutils.BasicGameType;
 import com.pablo.screen.BasicMiniGameScreen;
 
 public class MyGdxGame extends Game {
@@ -19,6 +20,8 @@ public class MyGdxGame extends Game {
 
     @Override
 	public void create () {
+
+		BasicGameType.getGameTypes();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(com.pablo.gameutils.GameInfo.CAMERA_WIDTH, com.pablo.gameutils.GameInfo.CAMERA_HEIGHT);
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);

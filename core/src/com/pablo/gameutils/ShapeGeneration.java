@@ -8,6 +8,7 @@ import java.util.Vector;
 
 /**
  * Created by Dennis on 18/02/2018.
+ * This class is used for generating points used withing the game.
  */
 
 public class ShapeGeneration {
@@ -16,14 +17,16 @@ public class ShapeGeneration {
     /**
      * Used to generate points given a basic game type
      * @param type the basic game type to be generated
-     * @return
+     * @return Points that define the curent puzzle
      * @exception IllegalArgumentException if the basic game type is not correctly defined
      */
     public static Vector<Vector2> generate(BasicGameType  type) throws IllegalArgumentException{
         
-        Vector<Vector2> res = null;
+        Vector<Vector2> res;
         if (type.isParallel()){
-            res= generateParallelPoints();
+            float angle = 40f + GameInfo.random.nextInt(50);
+            res = generateParallelogram(angle,50f,50f);
+
         }
         else if (type.isAngle()){
             

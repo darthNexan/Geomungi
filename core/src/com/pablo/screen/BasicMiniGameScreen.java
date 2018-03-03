@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,6 +21,8 @@ import com.pablo.gameutils.ShapeIdentification;
 import com.pablo.gameutils.Tuple2;
 import com.pablo.gameutils.UISprite;
 import com.pablo.input.BasicsInput;
+
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
@@ -49,6 +52,9 @@ public class BasicMiniGameScreen implements Screen {
     public UISprite quitButton;
     public UISprite nextButton;
 
+    private ArrayList<BasicGameType> gameStages;
+
+    private int currStages;
     public boolean endScreen;
 
 
@@ -70,12 +76,16 @@ public class BasicMiniGameScreen implements Screen {
         camera.update();
         //camera.rotate(90);
 
-        points = new Vector<Vector2>();
+
         selectedPoints = new Vector<Vector<Vector2>>();
         selectedPoints.add(new Vector<Vector2>());
         currentPoint = new Vector2(-1,-1);
         Gdx.input.setInputProcessor(new BasicsInput(currentPoint, this));
+        gameStages = BasicGameType.getGameTypes();
+        currStages = 0;
         init();
+
+
 
     }//Constructor
 
@@ -102,22 +112,17 @@ public class BasicMiniGameScreen implements Screen {
      * Sets up new game
      */
     private void init(){
-        basicGameType = new BasicGameType(1,3,0,5);
+        if (currStages>gameStages.size()-1) {
+            currStages =0;
+        }
 
+        basicGameType = gameStages.get(currStages);
 
-        points.clear();
         selectedPoints.clear();
         selectedPoints.add(new Vector<Vector2>());
 
-        Random rand = GameInfo.random;
-        //bounds the random values to the size of the screen
-        final int maxX = ((int)Math.ceil(camera.viewportWidth) - 2) *100;
-        final int maxY = ((int)Math.ceil(camera.viewportHeight) - 2)*100;
 
-        currentPoint.x=-1;
-        currentPoint.y=-1;
-
-        points = ShapeGeneration.generateShape(10);
+        points = ShapeGeneration.generate(basicGameType);
     }
     @Override
     public void show() {
@@ -207,6 +212,9 @@ public class BasicMiniGameScreen implements Screen {
         updateCurrentPoints();
         if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
             init();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.N)){
+            currStages ++;
         }
         Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

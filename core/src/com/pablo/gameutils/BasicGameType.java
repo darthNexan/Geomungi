@@ -1,6 +1,16 @@
 package com.pablo.gameutils;
 
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.PauseableThread;
+
+import java.util.ArrayList;
 import java.util.Random;
+
 
 /**
  * Created by Dennis on 07/02/2018.
@@ -10,7 +20,7 @@ public class BasicGameType {
 
 
 
-    int gameCategory;//General eg parallel lines, plane shape, angle, etc.
+    int category;//General eg parallel lines, plane shape, angle, etc.
     int shapeType; //type of triangle, quadrilateral, pentagon, hexagon, septagon,octagon,nonagon, decagon
     int angleType;  //obtuse, acute, right angle
     int specializedCategory; //for use with scalene, equilateral, isosceles, right angle, acute and obtuse triangles
@@ -21,42 +31,42 @@ public class BasicGameType {
      */
     public BasicGameType(){
         Random random = GameInfo.random;
-        gameCategory=-1;
+        category=-1;
         shapeType=-1;
         angleType=-1;
         specializedCategory=-1;
 
-        gameCategory = random.nextInt(3);
+        category = random.nextInt(3);
 
-        if(gameCategory == 1){
+        if(category == 1){
             shapeType = random.nextInt(8) + 3;
             if (shapeType == 0 || shapeType ==1){
                 specializedCategory = random.nextInt(6);
             }
         }
-        else if(gameCategory ==2){
+        else if(category ==2){
             angleType = random.nextInt(3);
         }
 
     }//BasicGameType Constructor
 
     public BasicGameType(int gameCategory, int shapeType, int angleType, int specializedCategory) {
-        this.gameCategory = gameCategory;
+        this.category = gameCategory;
         this.shapeType = shapeType;
         this.angleType = angleType;
         this.specializedCategory = specializedCategory;
     }
 
     public boolean isParallel(){
-        return gameCategory == 0;
+        return category == 0;
     }
 
     public boolean isShape(){
-        return gameCategory ==1;
+        return category ==1;
     }
 
     public boolean isAngle(){
-        return gameCategory ==2;
+        return category ==2;
     }
 
 
@@ -158,6 +168,38 @@ public class BasicGameType {
     public boolean isType5(){
         return specializedCategory==5;
     }
+
+
+    public static ArrayList<BasicGameType> getGameTypes(){
+
+
+        JsonReader reader = new JsonReader();
+
+        JsonValue jsonValue = reader.parse(Gdx.files.internal("basics.json"));
+        if (jsonValue.has("GameMode")){
+            jsonValue = jsonValue.get("GameMode").get(0);
+            //System.out.println(jsonValue);
+        }
+        else throw new IllegalStateException("Invalid Json");
+
+        if (jsonValue.getString("Section").equals("Basic")) {
+            jsonValue = jsonValue.get("Levels");
+        }
+
+        JsonValue.JsonIterator iterator = jsonValue.iterator();
+
+        ArrayList<BasicGameType> list = new ArrayList<BasicGameType>();
+
+        while (iterator.hasNext()){
+            JsonValue value = iterator.next();
+            BasicGameType temp = new BasicGameType(value.getInt("category"), value.getInt("shapeType"), value.getInt("angleType"),value.getInt("specializedCategory"));
+
+            list.add(temp);
+        }
+
+        return list;
+    }
+
 
 }//BasicGameType
 

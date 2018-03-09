@@ -1,7 +1,13 @@
 {
   "Progress": [
-    {"Basic":0},
-    {"Trig":0}
+    {"Section":"Basic",
+      "Level": 0,
+      "levelScore":0,
+      "score":0},
+    {"Section":"Trig",
+      "Level": 0,
+      "levelScore":0,
+      "score":0}
   ],
   "Score":{"Basic":0,"Trig":0},
   "GameMode":[
@@ -31,6 +37,11 @@
         { "category":1,
           "shapeType":3,
           "angleType":0,
+          "specializedCategory":6
+        },
+        { "category":1,
+          "shapeType":3,
+          "angleType":0,
           "specializedCategory":0
         },
         { "category":1,
@@ -63,10 +74,17 @@
           "angleType":0,
           "specializedCategory":6
         },
+
         { "category":1,
           "shapeType":4,
           "angleType":0,
+          "specializedCategory":6
+        },
+        {"category":1,
+          "shapeType":4,
+          "angleType":0,
           "specializedCategory":0
+
         },
         { "category":1,
           "shapeType":4,
@@ -92,11 +110,6 @@
           "shapeType":4,
           "angleType":0,
           "specializedCategory":5
-        },
-        { "category":1,
-          "shapeType":4,
-          "angleType":0,
-          "specializedCategory":6
         },
         { "category":1,
           "shapeType":5,

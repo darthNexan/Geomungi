@@ -2,6 +2,7 @@ package com.pablo.gameutils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.Vector;
 
@@ -264,7 +265,7 @@ public class ShapeIdentification {
         }
 
         if (isRhombus && res1 && res2){
-            res4 = calculateLength(lines.get(0), lines.get(1)) == calculateLength(lines.get(2), lines.get(3));
+            res4 = isApproxEqual(calculateLength(lines.get(0), lines.get(1)), calculateLength(lines.get(2), lines.get(3)));
         }
         return new Tuple4<Boolean, Boolean, Boolean,Boolean>(res1,res2,res3,res4);
     }//checkParallelogram
@@ -279,13 +280,17 @@ public class ShapeIdentification {
      *          the second indicates that the triangle is of the right type
      * @throws IllegalArgumentException thrown if an invalid type is entered
      */
-    public static Tuple2< Boolean,Boolean>  triangleA(Vector<Vector2> points, final int type) throws IllegalArgumentException {
+    public static Tuple3< Boolean,Boolean,Boolean>  triangleA(Vector<Vector2> points, final int type) throws IllegalArgumentException {
+
 
         if (type<0 || type>2){
             throw new IllegalArgumentException("Use class constants to specify the type of triangle");
         }
+        if (!points.lastElement().equals(points.firstElement())){
+            return new Tuple3<Boolean, Boolean,Boolean>(false,false,false);
+        }
         if (points.size() != 4) {//not a triangle
-            return new Tuple2<Boolean, Boolean>(false, false);
+            return new Tuple3<Boolean, Boolean,Boolean>(true,false, false);
         }
         else {
 
@@ -306,7 +311,7 @@ public class ShapeIdentification {
                 res = isApproxEqual(90f,angle0)|| isApproxEqual(90f,angle1) || isApproxEqual(90f,angle2);
             }
 
-            return new Tuple2<Boolean, Boolean>(true, res);
+            return new Tuple3<Boolean,Boolean, Boolean>(true,true, res);
         }
     }//triangleA
 
@@ -320,12 +325,15 @@ public class ShapeIdentification {
      *          the second value indicates whether the triangle is of the specified type
      * @throws IllegalArgumentException thrown if an invalid type is passed to the function
      */
-    public static Tuple2<Boolean,Boolean> triangleL(Vector<Vector2> points, final int type) throws IllegalArgumentException{
+    public static Tuple3<Boolean,Boolean,Boolean> triangleL(Vector<Vector2> points, final int type) throws IllegalArgumentException{
         if (type<0 || type>2){
             throw new IllegalArgumentException("Use class constants to specify the type of triangle");
         }
+        if (!points.lastElement().equals(points.firstElement())){
+            return new Tuple3<Boolean, Boolean, Boolean>(false,false,false);
+        }
         if (points.size() != 4) {//not a triangle
-            return new Tuple2<Boolean, Boolean>(false, false);
+            return new Tuple3<Boolean,Boolean, Boolean>(true, false,false);
         }
         else {
             boolean res =false;
@@ -354,7 +362,7 @@ public class ShapeIdentification {
             }
 
 
-            return new Tuple2<Boolean, Boolean>(true,res);
+            return new Tuple3<Boolean,Boolean, Boolean>(true,true,res);
         }
 
     }
@@ -366,8 +374,10 @@ public class ShapeIdentification {
      * @return a tuple indicating whether the figure is a kite. The first value states whether the shapes is a quad
      *         the second states whether the quad is a kite
      */
-    public static Tuple2<Boolean,Boolean> checkKite(Vector<Vector2> points){
-        boolean res0= points.size() == 5;
+    public static Tuple3<Boolean,Boolean,Boolean> checkKite(Vector<Vector2> points){
+        boolean res2 = points.lastElement().equals(points.firstElement());
+
+        boolean res0= points.size() == 5 && res2;
         boolean res1 = false;
 
         if (res0){
@@ -378,25 +388,28 @@ public class ShapeIdentification {
             d = points.get(3).dst(points.get(4));
 
 
-            res1 = (a == b && c ==d) || (a==c && b==d) || (a==d && b==c);
+            res1 = (isApproxEqual(a,b) && isApproxEqual(a,b)) || (isApproxEqual(a,c) && isApproxEqual(b,d))
+                    || (isApproxEqual(a,d) && isApproxEqual(b,c));
 
 
         }
 
 
 
-        return new Tuple2<Boolean, Boolean>(res0,res1);
+        return new Tuple3<Boolean, Boolean ,Boolean>(res2,res0,res1);
     }
 
     /**
      * TODO TEST
      * @param points the points to check
      * @return a tuple indicating whether the figure is a kite.
-     *          the first value indicates whether it is a quad
-     *          the second whether it is a trapezium
+     *          the first value indicates whether it is a shape
+     *          the second value indicates whether it is a quad
+     *          the third whether it is a trapezium
      */
-    public static Tuple2<Boolean,Boolean> checkTrapezium(Vector<Vector2> points){
-        boolean res1 = points.size() == 5 && points.firstElement().equals(points.lastElement());
+    public static Tuple3<Boolean,Boolean,Boolean> checkTrapezium(Vector<Vector2> points){
+        boolean res0 = points.firstElement().equals(points.lastElement());
+        boolean res1 = points.size() == 5 && res0;
         boolean res2=false;
 
         if (res1){
@@ -417,7 +430,21 @@ public class ShapeIdentification {
             res2 = identifyParallelLines(a,b) || identifyParallelLines(c,d);
         }
 
-        return new Tuple2<Boolean, Boolean>(res1,res2);
+        return new Tuple3<Boolean,Boolean,Boolean>(res0,res1,res2);
 
+    }
+
+    /**
+     * Tests whether the points make up a generic shape
+     * @param points points to test
+     * @param gameType number of sides that make up the shape
+     * @return A tuple indicating where the points make up a shape
+     *          the first element indicates whether the points make up a shape
+     *          the second element indicates whether there are the correct number of sides
+     * @throws IllegalArgumentException if an invalid game type is passed to the function
+     */
+    public static Tuple2<Boolean,Boolean> checkShape(Vector<Vector2>points, BasicGameType gameType) throws IllegalArgumentException{
+        if (!gameType.isShape()) throw new IllegalArgumentException("None shape type passed to check shape");
+        return new Tuple2<Boolean, Boolean>(points.firstElement().equals(points.lastElement()), points.firstElement().equals(points.lastElement()) && points.size() == gameType.shapeType + 1);
     }
 }

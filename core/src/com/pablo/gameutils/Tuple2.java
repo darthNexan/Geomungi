@@ -1,5 +1,8 @@
 package com.pablo.gameutils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Dennis on 10/02/2018.
  */
@@ -19,4 +22,14 @@ public class Tuple2<X,Y> {
     public String toString() {
         return "("+ x1.toString() + ", "+ x2.toString() +")";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        else {
+            return o instanceof Tuple2 && ((Tuple2) o).x2.equals(this.x2) && ((Tuple2) o).x1.equals(this.x1);
+        }
+    }
+
+
 }

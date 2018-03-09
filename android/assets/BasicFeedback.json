@@ -1,0 +1,186 @@
+[
+  { "category":0,
+    "shapeType":0,
+    "angleType":0,
+    "specializedCategory":0,
+    "FeedBack":[
+      "You needed two points define a pair of parallel lines",
+      "If the lines are extended they must not meet"
+    ],
+    "Labels":[
+      "Consists of at least two lines",
+      "Lines must never meet"
+    ]
+  },
+  { "category":2,
+    "shapeType":0,
+    "angleType":0,
+    "specializedCategory ":0,
+    "FeedBack":[
+      "Only three points are needed to define an Angle",
+      "Review the size of an acute angle"
+    ],
+    "Labels":[
+      "Consists of three points",
+      "Correct size"
+    ]
+  },
+  { "category":2,
+    "shapeType":0,
+    "angleType":1,
+    "specializedCategory":0,
+    "FeedBack":[
+      "Only three points are needed to define an angle",
+      "Review the size of an obtuse angle"
+    ],
+    "Labels":[
+      "Consists of three points",
+      "Correct size"
+    ]
+  },
+  { "category":2,
+    "shapeType":0,
+    "angleType":2,
+    "specializedCategory":0,
+    "FeedBack":[
+      "Only three points are needed to define an angle",
+      "Review the size of a right angle"
+    ],
+    "Labels":[
+      "Consists of three points",
+      "Correct size"
+    ]
+  },
+  { "category":1,
+    "shapeType":3,
+    "angleType":0,
+    "specializedCategory":6,
+    "FeedBack":[
+
+    ],
+    "Labels":[
+
+    ]
+  },
+  { "category":1,
+    "shapeType":3,
+    "angleType":0,
+    "specializedCategory":0,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":3,
+    "angleType":0,
+    "specializedCategory":1,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":3,
+    "angleType":0,
+    "specializedCategory":2,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":3,
+    "angleType":0,
+    "specializedCategory":3,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":3,
+    "angleType":0,
+    "specializedCategory":4,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":3,
+    "angleType":0,
+    "specializedCategory":5,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":3,
+    "angleType":0,
+    "specializedCategory":6,
+    "FeedBack":[]
+  },
+
+  { "category":1,
+    "shapeType":4,
+    "angleType":0,
+    "specializedCategory":6,
+    "FeedBack":[]
+  },
+  {"category":1,
+    "shapeType":4,
+    "angleType":0,
+    "specializedCategory":0,
+    "FeedBack":[]
+
+  },
+  { "category":1,
+    "shapeType":4,
+    "angleType":0,
+    "specializedCategory":1,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":4,
+    "angleType":0,
+    "specializedCategory":2,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":4,
+    "angleType":0,
+    "specializedCategory":3,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":4,
+    "angleType":0,
+    "specializedCategory":4,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":4,
+    "angleType":0,
+    "specializedCategory":5,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":5,
+    "angleType":0,
+    "specializedCategory":0
+  },
+  { "category":1,
+    "shapeType":6,
+    "angleType":0,
+    "specializedCategory":0,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":7,
+    "angleType":0,
+    "specializedCategory":0,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":8,
+    "angleType":0,
+    "specializedCategory":0,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":9,
+    "angleType":0,
+    "specializedCategory":0,
+    "FeedBack":[]
+  },
+  { "category":1,
+    "shapeType":10,
+    "angleType":0,
+    "specializedCategory":0,
+    "FeedBack":[]
+  }
+]

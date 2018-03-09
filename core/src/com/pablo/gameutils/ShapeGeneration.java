@@ -1,6 +1,6 @@
 package com.pablo.gameutils;
 
-import com.badlogic.gdx.Game;
+
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
@@ -227,32 +227,43 @@ public class ShapeGeneration {
 
     public static Vector<Vector2> generateParallelogram(float angle0,  final float base, final float height){
 
-        float angleInUse = GameInfo.random.nextInt(45);
+
         Vector2 translationVectorX = new Vector2(base,0);
-
-        //noinspection SuspiciousNameCombination
-        Vector2 translationVectorY = new Vector2(height,0);
-
-        translationVectorY.rotate(angleInUse);
-        translationVectorY.rotate(angle0);
-
-        translationVectorX.rotate(angleInUse);
-
-        Vector2 temp0 = new Vector2(25,25);
-        Vector2 temp1 = new Vector2(0,0);
-        Vector2 temp2 = new Vector2(0,0);
-        Vector2 temp3 = new Vector2(0,0);
-
-        temp1.add(temp0).add(translationVectorX);
-        temp2.add(temp0).add(translationVectorY);
-        temp3.add(temp1).add(translationVectorY);
         Vector<Vector2> vector2s = new Vector<Vector2>();
 
-        vector2s.add(temp0);
-        vector2s.add(temp1);
-        vector2s.add(temp2);
-        vector2s.add(temp3);
+        Vector2 temp0 = new Vector2( GameInfo.random.nextInt((int)GameInfo.CAMERA_WIDTH),
+                GameInfo.random.nextInt((int)GameInfo.CAMERA_HEIGHT));
+        Vector2 temp1 = new Vector2(0, 0);
+        Vector2 temp2 = new Vector2(0, 0);
+        Vector2 temp3 = new Vector2(0, 0);
+        do {
+            float angleInUse = GameInfo.random.nextInt(45);
+            vector2s.clear();
+            translationVectorX.set(base,0);
+            //noinspection SuspiciousNameCombination
+            Vector2 translationVectorY = new Vector2(height, 0);
 
+            translationVectorY.rotate(angleInUse);
+            translationVectorY.rotate(angle0);
+
+            translationVectorX.rotate(angleInUse);
+
+            temp0.set( GameInfo.random.nextInt((int)GameInfo.CAMERA_WIDTH),
+                    GameInfo.random.nextInt((int)GameInfo.CAMERA_HEIGHT));
+            temp1.set(0, 0);
+            temp2.set(0, 0);
+            temp3.set(0, 0);
+
+            temp1.add(temp0).add(translationVectorX);
+            temp2.add(temp0).add(translationVectorY);
+            temp3.add(temp1).add(translationVectorY);
+
+
+            vector2s.add(temp0);
+            vector2s.add(temp1);
+            vector2s.add(temp2);
+            vector2s.add(temp3);
+        }while (!checkAllVisibility(vector2s));
         return vector2s;
 
     }
@@ -384,7 +395,7 @@ public class ShapeGeneration {
             Vector2 line = new Vector2(1,0);
 
             while (tempSides > 0){
-                float angle = sides > 1 ? GameInfo.random.nextInt(100) + 70f: tempAngles;
+                float angle = sides > 1 ? GameInfo.random.nextInt(140) + 30f: tempAngles;
                 tempAngles-= angle;
                 line.setLength(GameInfo.random.nextInt(20) + 40f);
                 line.rotate(angle);
@@ -398,7 +409,7 @@ public class ShapeGeneration {
         return v;
     }
 
-    private static boolean checkAllVisibility(Vector<Vector2> v){
+    private static boolean checkAllVisibility(final Vector<Vector2> v){
 
         boolean res = true;
         int i = 0;
@@ -407,6 +418,7 @@ public class ShapeGeneration {
             System.out.println(res);
             i++;
         }
+
 
         return res;
     }

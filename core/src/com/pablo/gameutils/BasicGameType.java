@@ -23,6 +23,13 @@ public class BasicGameType {
     int category;//General eg parallel lines, plane shape, angle, etc.
     int shapeType; //type of triangle, quadrilateral, pentagon, hexagon, septagon,octagon,nonagon, decagon
     int angleType;  //obtuse, acute, right angle
+
+
+
+    public void setSpecializedCategory(int specializedCategory) {
+        this.specializedCategory = specializedCategory;
+    }
+
     int specializedCategory; //for use with scalene, equilateral, isosceles, right angle, acute and obtuse triangles
     //also for types of quadrilaterals parallelogram, rhombus, square, trapezoid, kite, rectangle
 
@@ -200,6 +207,8 @@ public class BasicGameType {
         return list;
     }
 
-
+    public int getSpecializedCategory() {
+        return specializedCategory;
+    }
 }//BasicGameType
 

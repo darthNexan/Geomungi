@@ -13,15 +13,24 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.pablo.gameutils.GameInfo;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.BasicGameType;
 import com.pablo.gameutils.ShapeGeneration;
 import com.pablo.gameutils.ShapeIdentification;
 import com.pablo.gameutils.Tuple2;
+import com.pablo.gameutils.Tuple3;
+import com.pablo.gameutils.Tuple4;
 import com.pablo.gameutils.UISprite;
 import com.pablo.input.BasicsInput;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
@@ -46,7 +55,8 @@ public class BasicMiniGameScreen implements Screen {
     private BasicGameType basicGameType;
 
     public UISprite checkButton;
-    public UISprite pauseButtonSprite;
+    public UISprite XButton;
+
 
     public UISprite tryAgainButton;
     public UISprite quitButton;
@@ -55,7 +65,9 @@ public class BasicMiniGameScreen implements Screen {
     private ArrayList<BasicGameType> gameStages;
 
     private int currStages;
-    public boolean endScreen;
+    public int currScore;
+    public int totalScore;
+
 
 
     public BasicMiniGameScreen(MyGdxGame game){
@@ -95,13 +107,13 @@ public class BasicMiniGameScreen implements Screen {
     private void setUpSprite(){
         Texture img = new Texture( "Pictures/bg.png");
         this.bgSprite = new Sprite(img);
-        this.pauseButtonSprite = new UISprite(new Texture("Pictures/Pause.png"));
-        float ratio = pauseButtonSprite.getHeight() / pauseButtonSprite.getWidth();
+        this.XButton = new UISprite(new Texture("Pictures/XNoBG.PNG"));
+        float ratio = XButton.getHeight() / XButton.getWidth();
 
-        pauseButtonSprite.setSize(GameInfo.CAMERA_WIDTH/8 , (GameInfo.CAMERA_WIDTH/8) * ratio);
+        XButton.setSize(GameInfo.CAMERA_WIDTH/8 , (GameInfo.CAMERA_WIDTH/8) * ratio);
         bgSprite.setSize(GameInfo.CAMERA_WIDTH, GameInfo.CAMERA_HEIGHT);
         bgSprite.setPosition(0,0);
-        pauseButtonSprite.setPosition( 8.5f * GameInfo.CAMERA_WIDTH/10, 9.5f * GameInfo.CAMERA_HEIGHT /10);
+        XButton.setPosition( 8.5f * GameInfo.CAMERA_WIDTH/10, 9.5f * GameInfo.CAMERA_HEIGHT /10);
 
         this.checkButton = new UISprite(new Texture("Pictures/tickNoBg.PNG"));
         this.checkButton.setPosition(0.5f * GameInfo.CAMERA_WIDTH/10, 9.5f * GameInfo.CAMERA_HEIGHT/10);
@@ -120,8 +132,6 @@ public class BasicMiniGameScreen implements Screen {
 
         selectedPoints.clear();
         selectedPoints.add(new Vector<Vector2>());
-
-
         points = ShapeGeneration.generate(basicGameType);
     }
     @Override
@@ -129,6 +139,10 @@ public class BasicMiniGameScreen implements Screen {
 
     }
 
+    /**
+     * Tests the selected points to determine whether it matches the correct result
+     * @return a boolean indicating whether the puzzle was successfully completed
+     */
 
     @SuppressWarnings("ConstantConditions")
     private boolean testSolution(){
@@ -137,10 +151,6 @@ public class BasicMiniGameScreen implements Screen {
         System.out.println(selectedPoints.size());
         if (basicGameType.isParallel() && selectedPoints.size() == 3 && basicGameType.isParallel()){
 
-            System.out.println(selectedPoints.get(0).size());
-            System.out.println(selectedPoints.get(1).size());
-            System.out.println(selectedPoints.get(2).size());
-            System.out.println(basicGameType.isParallel());
             res = selectedPoints.get(0).size()==2 && selectedPoints.get(1).size() == 2 &&
                     selectedPoints.get(2).isEmpty() &&
                     ShapeIdentification.identifyParallelLines(selectedPoints.firstElement(), selectedPoints.get(1));
@@ -164,7 +174,7 @@ public class BasicMiniGameScreen implements Screen {
         else if (basicGameType.isShape()){
 
             if (basicGameType.isTriangle()){
-                Tuple2<Boolean,Boolean> triangleRes=null;
+                Tuple3<Boolean,Boolean,Boolean> triangleRes=null;
                 if (basicGameType.isType0()){
                     triangleRes = ShapeIdentification.triangleL(selectedPoints.firstElement(),
                             ShapeIdentification.EQUILATERAL);
@@ -187,25 +197,62 @@ public class BasicMiniGameScreen implements Screen {
                     triangleRes = ShapeIdentification.triangleA(selectedPoints.firstElement(),
                             ShapeIdentification.OBTUSE);
                 }
-                else {
+                else if (basicGameType.isType5()) {
                     triangleRes = ShapeIdentification.triangleA(selectedPoints.firstElement(),
                             ShapeIdentification.RIGHT);
                 }
 
+
                 System.out.println(triangleRes);
-                res = triangleRes.x1 && triangleRes.x2;
+                res = triangleRes.x1 && triangleRes.x2 && triangleRes.x3;
             }
             else if (basicGameType.isQuad()){
+                Tuple4<Boolean,Boolean,Boolean,Boolean> quadRes1 = null;
+                Tuple3<Boolean,Boolean,Boolean> quadRes2 = null;
+                Tuple2<Boolean,Boolean> quadRes3 =null;
 
+                if(basicGameType.isType0()){
+
+                    quadRes1 = ShapeIdentification.checkParallelogram(selectedPoints.firstElement(),true,true);
+
+                }else if (basicGameType.isType1()){
+                    quadRes1 = ShapeIdentification.checkParallelogram(selectedPoints.firstElement(),true,false);
+                }else if (basicGameType.isType2()){
+                    quadRes2 = ShapeIdentification.checkKite(selectedPoints.firstElement());
+                }else if(basicGameType.isType3()){
+                    quadRes1 = ShapeIdentification.checkParallelogram(selectedPoints.firstElement(),false,true);
+                }else if(basicGameType.isType4()){
+                    quadRes1 = ShapeIdentification.checkParallelogram(selectedPoints.firstElement(),false,false);
+                }else if(basicGameType.isType5()){
+                    quadRes2 = ShapeIdentification.checkTrapezium(selectedPoints.firstElement());
+                }
+                else {
+                    quadRes3 = ShapeIdentification.checkShape(selectedPoints.firstElement(), basicGameType);
+                }
+
+                if (!(quadRes1 == null)){
+                    res = quadRes1.x1 && quadRes1.x2 && quadRes1.x3 && quadRes1.x4;
+                    System.out.println(quadRes1);
+                }
+                else if (!(quadRes2 == null)){
+                    res = quadRes2.x1 && quadRes2.x2 && quadRes2.x3;
+                    System.out.println(quadRes2);
+                }
+                else {
+                    res = quadRes3.x1 && quadRes3.x2;
+                    System.out.println(quadRes3);
+                }
             }
             else {
-
+                Tuple2<Boolean,Boolean> shapeRes = ShapeIdentification.checkShape(selectedPoints.firstElement(),basicGameType);
+                res = shapeRes.x1 && shapeRes.x2;
+                System.out.println(shapeRes);
             }
 
         }
         return res;
 
-    }
+    }//
 
     @Override
     public void render(float delta) {
@@ -215,6 +262,7 @@ public class BasicMiniGameScreen implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)){
             currStages ++;
+            init();
         }
         Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -224,7 +272,7 @@ public class BasicMiniGameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         bgSprite.draw(batch);
-        pauseButtonSprite.draw(batch);
+        XButton.draw(batch);
         checkButton.draw(batch);
         batch.end();
 
@@ -268,8 +316,10 @@ public class BasicMiniGameScreen implements Screen {
         }
 
 
-        if (pauseButtonSprite.isClicked()){
-            System.out.println("Touched pause button");
+        if (XButton.isClicked()){
+            System.out.println("Touched X button");
+            selectedPoints.clear();
+            selectedPoints.add(new Vector<Vector2>());
         }
         if (checkButton.isClicked() && !selectedPoints.isEmpty()){
             System.out.println("Touched check answer button" );
@@ -306,50 +356,6 @@ public class BasicMiniGameScreen implements Screen {
 
     }
 
-    /**
-     * TODO Edit this method to make it functional
-     *
-     * @return Tests if the current game is a shape.
-     */
-    private boolean isShape(){
-        return false;
-    }
-
-    /**
-     * TODO Edit this method to make it functional
-     * @return Tests if the current game is an angle.
-     */
-
-    private boolean isAngle(){
-        return false;
-    }
-
-    private boolean isLinePair(){return false;}
-
-    /**
-     *
-     * @param v1 end of one line
-     * @param v2 the point of intersection
-     * @param v3 end of one line
-     * @return Angle at v2
-     */
-    private float calculateAngle(Vector2 v1, Vector2 v2, Vector2 v3){
-
-        Vector2 vector1 = v1.sub(v2);
-        Vector2 vector2 = v2.sub(v3);
-        return vector1.angle(vector2);
-    }
-
-    private boolean isParallel(Vector2 v1, Vector2 v2, Vector2 v3, Vector2 v4){
-        Vector2 vector1 = new Vector2(v1.x + v2.x, v1.x + v2.x);
-
-        Vector2 vector2 = new Vector2(v3.x +v4.x, v3.y + v4.y);
-
-       // System.out.println("ran");
-
-        return vector1.hasSameDirection(vector2) || vector1.hasOppositeDirection(vector2);
-    }
-
 
     private boolean updateCurrentPoints(){
 
@@ -362,6 +368,18 @@ public class BasicMiniGameScreen implements Screen {
             selectedPoints.add(new Vector<Vector2>());
         }//if composed of several lines add a new vector
 
+        if (currentPoint.x ==-1 && currentPoint.y ==-1) return false;
+
+        //just added
+        boolean complete = basicGameType.isShape() && selectedPoints.get(0).size()>3 &&
+                selectedPoints.get(0).firstElement().equals(selectedPoints.get(0).lastElement());
+        if (complete) {
+           // System.out.println("ran complete shape");
+            return false;
+        }
+
+
+
         Vector<Vector2> linesToUpdate = selectedPoints.get(selectedPoints.size() -1);
 
         while (i < points.size()){
@@ -369,7 +387,9 @@ public class BasicMiniGameScreen implements Screen {
             if (currentPoint.dst(points.get(i)) < 1.5f &&
                     ( linesToUpdate.size() == 0 || !points.get(i).equals(linesToUpdate.get(linesToUpdate.size() -1)))){
 
+                //if (validatePoint(linesToUpdate,points.get(i))){
                 linesToUpdate.add(new Vector2(points.get(i).x, points.get(i).y));
+                //}
                 Gdx.input.vibrate(20);
                 return true;
             }
@@ -382,320 +402,39 @@ public class BasicMiniGameScreen implements Screen {
     }
 
 
-    private Vector2 generateVector(){
-        int x,y;
-
-        x = GameInfo.random.nextInt(10);
-        y = GameInfo.random.nextInt(10);
-
-        return new Vector2(x,y);
-
-    }
 
 
-    private BasicGameType createGame(){
-        return new BasicGameType();
-    }
-
-    private Vector<Vector2> generateParallelPoints(){
-        int i = 0;
-        Random random = GameInfo.random;
-        Vector<Vector2> vec = new Vector<Vector2>();
-
-        Vector2 identity = new Vector2(1,0);
-        final int Scale =(int)Math.floor(GameInfo.CAMERA_WIDTH/2);
-
-
-       // System.out.println(i);
-
-        while (i<=2){
-
-
-            Vector2 temp0 = new Vector2();
-            Vector2 temp1 = new Vector2();
-
-            //System.out.println( xInc * temp.x1 );
-            //System.out.println(yInc * temp.x2);
-            temp0.x = random.nextInt( (int)GameInfo.CAMERA_WIDTH );
-            temp0.y = random.nextInt( (int)GameInfo.CAMERA_HEIGHT);
-
-//           // temp = findSection(useXSection);
-
-            temp1.x =temp0.x;
-            temp1.y =temp0.y;
-
-            do {
-                temp1.x =temp0.x;
-                temp1.y =temp0.y;
-                identity.x =1;
-                identity.y =0;
-
-                identity.scl(Scale);
-
-                identity.rotate(random.nextInt(360));
-                temp1.add(identity);
-
-            }while (!checkVisibility(temp1));//ensures that the point is within the screen
-
-
-
-            vec.add(temp0);
-            vec.add(temp1);
-
-
-            Vector2 temp2 = new Vector2(temp0.x,temp0.y);
-            Vector2 temp3 = new Vector2(temp1.x, temp1.y);
-
-
-            do {
-
-                temp2.x = temp0.x;
-                temp2.y = temp0.y;
-                temp3.x = temp1.x;
-                temp3.y = temp1.y;
-
-                identity.x =1;
-                identity.y=1;
-
-                identity.scl(Scale/2);
-                identity.rotate(random.nextInt(360));
-                temp2.add(identity);
-                temp3.add(identity);
-                if(checkVisibility(temp2) && checkVisibility(temp3)) {
-
-                    vec.add(temp2);
-                    vec.add(temp3);
-
+    private boolean validatePoint(Vector<Vector2> points, Vector2 newPoint){
+        if (points.firstElement().equals(newPoint)) return true;
+        else{
+            boolean res = true;
+            for (int i = 1; i<points.size();i++){
+                if (newPoint.equals(points.get(i))){
+                    res = false;
                     break;
                 }
-
-            }while (true);
-            i+=2;
-
-        }
-
-
-
-
-
-        return vec;
-    }//parallel points
-
-    private Vector<Vector2> generateKitePoints(float length, float width){
-        float angleToUse = (float)GameInfo.random.nextInt(360);
-        angleToUse = 0f;
-        int scale = (int)GameInfo.CAMERA_WIDTH/5;
-        float topAngle = (float)GameInfo.random.nextInt(25) +20;
-        Vector2 lineRight = new Vector2(1,0);
-        Vector2 lineLeft = new Vector2(1,0);
-        lineRight.scl(scale);
-        lineLeft.scl(scale);
-        lineRight.rotate(topAngle + 270);
-        lineLeft.rotate(270-topAngle);
-
-        Vector2 temp0 = new Vector2(GameInfo.random.nextInt(6*(int)GameInfo.CAMERA_WIDTH)/8 +
-                GameInfo.CAMERA_WIDTH/8, GameInfo.random.nextInt((int)GameInfo.CAMERA_HEIGHT - (int)GameInfo.CAMERA_HEIGHT/2) +
-                GameInfo.CAMERA_HEIGHT/2);
-
-        Vector2 temp1 = new Vector2(temp0.x, temp0.y);
-        temp1.sub(0,scale * 2.2f);
-
-        Vector2 temp3 = new Vector2(temp0.x,temp0.y);
-        temp3.add(lineRight);
-        Vector2 temp4 = new Vector2(temp0.x,temp0.y);
-        temp4.add(lineLeft);
-
-        Vector<Vector2> v = new Vector<Vector2>();
-
-        v.add(temp0);
-        v.add(temp1);
-        v.add(temp3);
-        v.add(temp4);
-
-        return v;
-    }
-
-    private Vector<Vector2> generateParallelogram(float angle0,  final float base, final float height){
-
-        float angleInUse = GameInfo.random.nextInt(45);
-        Vector2 translationVectorX = new Vector2(base,0);
-
-        //noinspection SuspiciousNameCombination
-        Vector2 translationVectorY = new Vector2(height,0);
-
-        translationVectorY.rotate(angleInUse);
-        translationVectorY.rotate(angle0);
-
-        translationVectorX.rotate(angleInUse);
-
-        Vector2 temp0 = new Vector2(25,25);
-        Vector2 temp1 = new Vector2(0,0);
-        Vector2 temp2 = new Vector2(0,0);
-        Vector2 temp3 = new Vector2(0,0);
-
-        temp1.add(temp0).add(translationVectorX);
-        temp2.add(temp0).add(translationVectorY);
-        temp3.add(temp1).add(translationVectorY);
-        Vector<Vector2> vector2s = new Vector<Vector2>();
-
-        vector2s.add(temp0);
-        vector2s.add(temp1);
-        vector2s.add(temp2);
-        vector2s.add(temp3);
-
-        return vector2s;
-
-    }
-
-
-    private Vector<Vector2> generateTrapezium (float a, float b, float height) {
-
-        Vector<Vector2> v = new Vector<Vector2>();
-
-
-        Vector2 topLine = new Vector2(a,0);
-
-        Vector2 bottomLine = new Vector2(b,0);
-
-        Vector2 h = new Vector2(0, height);
-        Vector2 temp0 = new Vector2(0,0);
-        Vector2 temp1 = new Vector2(0,0);
-        Vector2 temp2 = new Vector2(0f,0f);
-        Vector2 temp3 = new Vector2(0f,0f);
-
-
-        do {
-            float angleToUse = 45*GameInfo.random.nextFloat();
-
-            float x = GameInfo.random.nextInt((int)GameInfo.CAMERA_WIDTH);
-            float y = GameInfo.random.nextInt( (int)GameInfo.CAMERA_HEIGHT);
-            topLine.x=a;
-            topLine.y=0;
-
-            bottomLine.x = b;
-            bottomLine.y =0;
-
-            h.x=0;
-            h.y=height;
-            h.rotate(angleToUse);
-
-            temp0.x=x;
-            temp0.y=y;
-
-            temp1.x=x;
-            temp1.y=y;
-
-            temp2.x=0;
-            temp2.y=0;
-
-            temp3.x=0;
-            temp3.y=0;
-
-
-
-            temp1.add(topLine);
-
-            temp2.add(h).add(temp0);
-
-            temp3.add(temp2).add(bottomLine);
-        }while (!checkVisibility(temp0) || !checkVisibility(temp1) ||
-                !checkVisibility(temp2) || !checkVisibility(temp3));
-
-
-        v.add(temp0);
-        v.add(temp1);
-        v.add(temp2);
-        v.add(temp3);
-            return v;
-    }
-
-    private Vector <Vector2> generateTriangle(float a, float b,  float angle0){
-
-        Vector2 initalPoint = new Vector2();
-        Vector2 sideA = new Vector2(1,0);
-        Vector2 sideB = new Vector2(1,0);
-
-        Vector2 point0 = new Vector2();
-        Vector2 point1 = new Vector2();
-
-        //noinspection StatementWithEmptyBody
-        do{
-
-            int angleToUse = GameInfo.random.nextInt(360);
-            initalPoint.x = GameInfo.random.nextInt((int) Math.floor(GameInfo.CAMERA_WIDTH));
-            initalPoint.y = GameInfo.random.nextInt((int) Math.floor(GameInfo.CAMERA_HEIGHT));
-
-            sideA.x =1;
-            sideA.y=0;
-            sideB.x =1;
-            sideB.y=0;
-            point0.x =0;
-            point1.x =0;
-            point1.y=0;
-            point0.y=0;
-
-
-
-
-            sideA.scl(a);
-            sideA.rotate(angleToUse);
-            sideB.scl(b);
-            sideB.rotate(angleToUse);
-
-            sideB.rotate(angle0);
-
-            point0.add(initalPoint).add(sideA);
-            point1.add(initalPoint).add(sideB);
-
-
-
-
-        }while (!checkVisibility(point0) || !checkVisibility(point1) || !checkVisibility(initalPoint));
-
-        Vector<Vector2> vector = new Vector<Vector2>();
-        vector.add(point0);
-        vector.add(point1);
-        vector.add(initalPoint);
-        return vector;
-    }
-
-    private Vector2 genVector(){
-
-        if (GameInfo.random.nextBoolean()){
-            return new Vector2(GameInfo.random.nextInt((int)GameInfo.CAMERA_WIDTH/20),0);
-        }
-        else {
-            return new Vector2(0,GameInfo.random.nextInt((int)GameInfo.CAMERA_WIDTH/20));
-
-        }
-
-    }
-
-    public Tuple2<Integer,Integer> findSection(boolean[][] usedSpaces){
-
-
-        int temp0,temp1;
-        final int maxX = usedSpaces.length;
-        final int maxY = usedSpaces[0].length;
-        while (true){
-            temp0 = GameInfo.random.nextInt(maxX);
-            temp1 = GameInfo.random.nextInt(maxY);
-
-            if(usedSpaces[temp0][temp1]){
-               break;
             }
-
-
+            return res;
         }
-
-        return new Tuple2<Integer, Integer>(temp0,temp1);
-    }
-
-    private boolean checkVisibility(Vector2 vector2){
-
-        return vector2.x >1 && vector2.x<GameInfo.CAMERA_WIDTH && vector2.y >1 && vector2.y <GameInfo.CAMERA_HEIGHT ;
     }
 
 
+    /**
+     *
+     */
+    private void readjson(){
+
+        JsonReader reader = new JsonReader();
+        JsonValue value = reader.parse(Gdx.files.internal("basics.json")).get("Progress").get(0);
+        //reads in the saved state for the score level  and level score
+        currScore = value.getInt("levelScore");
+        totalScore = value.getInt("score");
+        currStages = value.getInt("Level");
+
+    }
+
+    private void writeJson(){
+
+    }
 
 }//BasicsMiniGameScreen

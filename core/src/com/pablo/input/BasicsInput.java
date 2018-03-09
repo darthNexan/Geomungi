@@ -20,7 +20,7 @@ public class BasicsInput extends InputAdapter {
     private UISprite uiSprite;
     private UISprite uiSprite2;
     public BasicsInput(Vector2 pos, BasicMiniGameScreen screen){
-        this.uiSprite =  screen.pauseButtonSprite;
+        this.uiSprite =  screen.XButton;
         this.uiSprite2 = screen.checkButton;
         this.pos = pos;
     }

@@ -2,12 +2,9 @@ package com.pablo.gameutils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.Vector;
-
 import static java.lang.Math.abs;
-import static java.lang.Math.floor;
+
 
 /**
  * Contains methods used for identifying figures drawn by users.
@@ -223,8 +220,8 @@ public class ShapeIdentification {
      *
      * @param lines set of points that make up the shape. The first and last points must be equal
      * @param isRight checks to see if the angle is a right angle
-     * @return  the first value states whether the lines are parallel
-     *          the second checks if opposite lines are equal in length
+     * @return  The first value indicates whether the shape has four sides
+     *          the second value states whether the lines are parallel
      *          the third indicates if the angles are right
      *          the fourth checks if all lines are equal
      */

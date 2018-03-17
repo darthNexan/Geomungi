@@ -16,7 +16,7 @@
   { "category":2,
     "shapeType":0,
     "angleType":0,
-    "specializedCategory ":0,
+    "specializedCategory":0,
     "FeedBack":[
       "Only three points are needed to define an Angle",
       "Review the size of an acute angle"
@@ -87,6 +87,7 @@
   { "category":1,
     "shapeType":3,
     "angleType":0,
+    "specializedCategory":1,
     "FeedBack":["Connect the points so that they form a cycle",
       "A triangle only has three sides",
       "At least two sides must be equal"

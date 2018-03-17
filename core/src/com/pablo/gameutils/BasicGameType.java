@@ -20,39 +20,40 @@ public class BasicGameType {
 
 
 
-    int category;//General eg parallel lines, plane shape, angle, etc.
-    int shapeType; //type of triangle, quadrilateral, pentagon, hexagon, septagon,octagon,nonagon, decagon
-    int angleType;  //obtuse, acute, right angle
-
-
-
-    public void setSpecializedCategory(int specializedCategory) {
-        this.specializedCategory = specializedCategory;
-    }
-
-    int specializedCategory; //for use with scalene, equilateral, isosceles, right angle, acute and obtuse triangles
+    public final int category;//General eg parallel lines, plane shape, angle, etc.
+    public final int shapeType; //type of triangle, quadrilateral, pentagon, hexagon, septagon,octagon,nonagon, decagon
+    public final int angleType;  //obtuse, acute, right angle
+    public final int specializedCategory; //for use with scalene, equilateral, isosceles, right angle, acute and obtuse triangles
     //also for types of quadrilaterals parallelogram, rhombus, square, trapezoid, kite, rectangle
-
+    public String header;
     /**
      * Returns a fully constructed game mode
      */
     public BasicGameType(){
         Random random = GameInfo.random;
-        category=-1;
-        shapeType=-1;
-        angleType=-1;
-        specializedCategory=-1;
+
 
         category = random.nextInt(3);
 
         if(category == 1){
             shapeType = random.nextInt(8) + 3;
+            angleType = -1;
             if (shapeType == 0 || shapeType ==1){
                 specializedCategory = random.nextInt(6);
+            }
+            else {
+                specializedCategory = -1;
             }
         }
         else if(category ==2){
             angleType = random.nextInt(3);
+            shapeType = -1;
+            specializedCategory =-1;
+        }
+        else {
+            angleType = -1;
+            shapeType = -1;
+            specializedCategory =-1;
         }
 
     }//BasicGameType Constructor
@@ -200,7 +201,7 @@ public class BasicGameType {
         while (iterator.hasNext()){
             JsonValue value = iterator.next();
             BasicGameType temp = new BasicGameType(value.getInt("category"), value.getInt("shapeType"), value.getInt("angleType"),value.getInt("specializedCategory"));
-
+            temp.header = value.getString("Header");
             list.add(temp);
         }
 

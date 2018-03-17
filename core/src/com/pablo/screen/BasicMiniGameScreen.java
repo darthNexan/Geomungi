@@ -4,18 +4,21 @@ package com.pablo.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.PixmapPacker;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.pablo.gameutils.GameInfo;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.BasicGameType;
@@ -26,14 +29,9 @@ import com.pablo.gameutils.Tuple3;
 import com.pablo.gameutils.Tuple4;
 import com.pablo.gameutils.UISprite;
 import com.pablo.input.BasicsInput;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Vector;
+import static java.lang.Math.ceil;
 
 /**
  * Created by Dennis on 04/02/2018.
@@ -62,15 +60,22 @@ public class BasicMiniGameScreen implements Screen {
     public UISprite quitButton;
     public UISprite nextButton;
 
+
     private ArrayList<BasicGameType> gameStages;
 
-    private int currStages;
-    public int currScore;
-    public int totalScore;
+    final int NUMBER_OF_LEVELS;
+    int currStages;
+    int totalScore;
+    int numberOfAttempts;
+
+    private BitmapFont font;
+
 
 
 
     public BasicMiniGameScreen(MyGdxGame game){
+        generateFonts();
+        numberOfAttempts = GameInfo.No_OF_ATTEMPTS;
         this.game=game;
         //setting up background
 
@@ -96,10 +101,12 @@ public class BasicMiniGameScreen implements Screen {
         gameStages = BasicGameType.getGameTypes();
         currStages = 0;
         init();
+        NUMBER_OF_LEVELS = gameStages.size();
 
 
 
     }//Constructor
+
 
     /**
      * initializes sprites
@@ -120,6 +127,30 @@ public class BasicMiniGameScreen implements Screen {
         this.checkButton.setSize(GameInfo.CAMERA_WIDTH/8 , (GameInfo.CAMERA_WIDTH/8) * ratio);
     }//SetUpSprite
 
+    private void generateFonts(){
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Karma.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        Tuple2<Integer,Float> scale = scaleHelper(6);
+        parameter.color = Color.WHITE;
+        parameter.size = scale.x1;
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 2f;
+        parameter.minFilter = Texture.TextureFilter.Linear;
+        parameter.magFilter = Texture.TextureFilter.Linear;
+        parameter.mono=true;
+        parameter.mono = true;
+
+        font = generator.generateFont(parameter);
+        font.setUseIntegerPositions(false);
+        font.getData().setScale(scale.x2);
+
+    }
+
+    private Tuple2<Integer,Float> scaleHelper(final int size){
+        Integer sizeRes = (int)ceil(size * (Gdx.graphics.getHeight() / GameInfo.CAMERA_HEIGHT));
+        Float scaleRes =GameInfo.CAMERA_HEIGHT/Gdx.graphics.getHeight();
+        return new Tuple2<Integer,Float>(sizeRes, scaleRes);
+    }
     /**
      * Sets up new game
      */
@@ -136,7 +167,7 @@ public class BasicMiniGameScreen implements Screen {
     }
     @Override
     public void show() {
-
+        init();
     }
 
     /**
@@ -146,35 +177,38 @@ public class BasicMiniGameScreen implements Screen {
 
     @SuppressWarnings("ConstantConditions")
     private boolean testSolution(){
+        Gdx.app.debug("Test Solution:", "Got this far");
 
-        boolean res = false;
-        System.out.println(selectedPoints.size());
-        if (basicGameType.isParallel() && selectedPoints.size() == 3 && basicGameType.isParallel()){
+        if (basicGameType.isParallel()){
 
-            res = selectedPoints.get(0).size()==2 && selectedPoints.get(1).size() == 2 &&
-                    selectedPoints.get(2).isEmpty() &&
-                    ShapeIdentification.identifyParallelLines(selectedPoints.firstElement(), selectedPoints.get(1));
+            boolean firstTest = selectedPoints.size() == 3;
+            Tuple2<Boolean, Boolean> res = new Tuple2<Boolean, Boolean>(firstTest &&
+                    selectedPoints.get(0).size() == 2 && selectedPoints.get(1).size() == 2 && selectedPoints.get(2).isEmpty(),
+                    firstTest && ShapeIdentification.identifyParallelLines(selectedPoints.firstElement(), selectedPoints.get(1)));
 
-            System.out.println(res);
 
+            goToResultScreen(res);
 
         }
         else if(basicGameType.isAngle()){
             boolean res0 = selectedPoints.firstElement().size() == 3;
+            boolean res1 = false;
             if (res0) {
                 float angleSize = ShapeIdentification.calculateAngle(selectedPoints.firstElement().get(0),
                         selectedPoints.firstElement().get(1), selectedPoints.firstElement().get(2));
 
-                //System.out.println(angleSize);
-                res = basicGameType.isAcute() ? angleSize < 90f : basicGameType.isObtuse() ? angleSize > 90f :
+                res1 = basicGameType.isAcute() ? angleSize < 90f : basicGameType.isObtuse() ? angleSize > 90f :
                         angleSize == 90f;
             }
-            System.out.println(res);
+            Tuple2<Boolean,Boolean> res = new Tuple2<Boolean, Boolean>(res0,res1);
+
+            goToResultScreen(res);
         }
         else if (basicGameType.isShape()){
 
             if (basicGameType.isTriangle()){
                 Tuple3<Boolean,Boolean,Boolean> triangleRes=null;
+                Tuple2<Boolean,Boolean> genericTriangleRes = null;
                 if (basicGameType.isType0()){
                     triangleRes = ShapeIdentification.triangleL(selectedPoints.firstElement(),
                             ShapeIdentification.EQUILATERAL);
@@ -201,10 +235,15 @@ public class BasicMiniGameScreen implements Screen {
                     triangleRes = ShapeIdentification.triangleA(selectedPoints.firstElement(),
                             ShapeIdentification.RIGHT);
                 }
+                else {
+                    genericTriangleRes = ShapeIdentification.checkShape(selectedPoints.firstElement(),basicGameType);
+                }
 
 
-                System.out.println(triangleRes);
-                res = triangleRes.x1 && triangleRes.x2 && triangleRes.x3;
+                if (triangleRes !=null)
+                    goToResultScreen(triangleRes);
+                else if (genericTriangleRes !=null)
+                    goToResultScreen(genericTriangleRes);
             }
             else if (basicGameType.isQuad()){
                 Tuple4<Boolean,Boolean,Boolean,Boolean> quadRes1 = null;
@@ -231,26 +270,22 @@ public class BasicMiniGameScreen implements Screen {
                 }
 
                 if (!(quadRes1 == null)){
-                    res = quadRes1.x1 && quadRes1.x2 && quadRes1.x3 && quadRes1.x4;
-                    System.out.println(quadRes1);
+                    goToResultScreen(quadRes1);
                 }
                 else if (!(quadRes2 == null)){
-                    res = quadRes2.x1 && quadRes2.x2 && quadRes2.x3;
-                    System.out.println(quadRes2);
+                    goToResultScreen(quadRes2);
                 }
                 else {
-                    res = quadRes3.x1 && quadRes3.x2;
-                    System.out.println(quadRes3);
+                    goToResultScreen(quadRes3);
                 }
             }
             else {
                 Tuple2<Boolean,Boolean> shapeRes = ShapeIdentification.checkShape(selectedPoints.firstElement(),basicGameType);
-                res = shapeRes.x1 && shapeRes.x2;
-                System.out.println(shapeRes);
+                goToResultScreen(shapeRes);
             }
 
         }
-        return res;
+        return true;
 
     }//
 
@@ -274,6 +309,7 @@ public class BasicMiniGameScreen implements Screen {
         bgSprite.draw(batch);
         XButton.draw(batch);
         checkButton.draw(batch);
+        drawText(batch);
         batch.end();
 
         //render lines
@@ -315,18 +351,16 @@ public class BasicMiniGameScreen implements Screen {
 
         }
 
+        line1.end();
 
         if (XButton.isClicked()){
-            System.out.println("Touched X button");
             selectedPoints.clear();
             selectedPoints.add(new Vector<Vector2>());
         }
         if (checkButton.isClicked() && !selectedPoints.isEmpty()){
-            System.out.println("Touched check answer button" );
             testSolution();
         }
 
-        line1.end();
 
 
     }//render
@@ -353,9 +387,13 @@ public class BasicMiniGameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        line1.dispose();
     }
 
+    /**
+     * Adds current touch location to the selected points vector
+     * @return a boolean indicating if a point was added
+     */
 
     private boolean updateCurrentPoints(){
 
@@ -374,17 +412,14 @@ public class BasicMiniGameScreen implements Screen {
         boolean complete = basicGameType.isShape() && selectedPoints.get(0).size()>3 &&
                 selectedPoints.get(0).firstElement().equals(selectedPoints.get(0).lastElement());
         if (complete) {
-           // System.out.println("ran complete shape");
             return false;
         }
-
-
 
         Vector<Vector2> linesToUpdate = selectedPoints.get(selectedPoints.size() -1);
 
         while (i < points.size()){
 
-            if (currentPoint.dst(points.get(i)) < 1.5f &&
+            if (currentPoint.dst(points.get(i)) < 5.0f &&
                     ( linesToUpdate.size() == 0 || !points.get(i).equals(linesToUpdate.get(linesToUpdate.size() -1)))){
 
                 //if (validatePoint(linesToUpdate,points.get(i))){
@@ -427,13 +462,37 @@ public class BasicMiniGameScreen implements Screen {
         JsonReader reader = new JsonReader();
         JsonValue value = reader.parse(Gdx.files.internal("basics.json")).get("Progress").get(0);
         //reads in the saved state for the score level  and level score
-        currScore = value.getInt("levelScore");
+       // currScore = value.getInt("levelScore");
         totalScore = value.getInt("score");
         currStages = value.getInt("Level");
 
     }
 
     private void writeJson(){
+
+    }
+
+    private void goToResultScreen(Tuple2<Boolean,Boolean> res){
+        ResultScreen resScreen = new ResultScreen(gameStages.get(currStages),res, game,this);
+        game.setScreen(resScreen);
+
+    }
+
+    private void goToResultScreen(Tuple3<Boolean,Boolean,Boolean> res){
+        ResultScreen resScreen = new ResultScreen(gameStages.get(currStages),res, game,this);
+        game.setScreen(resScreen);
+    }
+
+    private void goToResultScreen(Tuple4<Boolean,Boolean,Boolean,Boolean> res){
+        ResultScreen resScreen = new ResultScreen(gameStages.get(currStages),res, game,this);
+        game.setScreen(resScreen);
+    }
+
+    private void drawText(SpriteBatch batch){
+        GlyphLayout layout = new GlyphLayout(font,"Draw "+basicGameType.header,Color.BLACK,50f, Align.center,false);
+
+        Vector2 pos = new Vector2(2*GameInfo.CAMERA_WIDTH/10 + 10f,  GameInfo.CAMERA_HEIGHT -5f);
+        font.draw(batch,layout, pos.x,pos.y);
 
     }
 

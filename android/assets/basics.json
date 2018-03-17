@@ -17,124 +17,358 @@
         { "category":0,
           "shapeType":0,
           "angleType":0,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":[
+            "You needed two points define a pair of parallel lines",
+            "If the lines are extended they must not meet"
+          ],
+          "Labels":[
+            "Consists of at least two lines",
+            "Lines must never meet"
+          ],
+          "Header":"Parallel Lines"
         },
         { "category":2,
           "shapeType":0,
           "angleType":0,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":[
+            "Only three points are needed to define an Angle",
+            "Review the size of an acute angle"
+          ],
+          "Labels":[
+            "Consists of three points",
+            "Correct size"
+          ],
+          "Header":"Acute Angle"
         },
         { "category":2,
           "shapeType":0,
           "angleType":1,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":[
+            "Only three points are needed to define an angle",
+            "Review the size of an obtuse angle"
+          ],
+          "Labels":[
+            "Consists of three points",
+            "Correct size"
+          ],
+          "Header":"Obtuse Angle"
         },
         { "category":2,
           "shapeType":0,
           "angleType":2,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":[
+            "Only three points are needed to define an angle",
+            "Review the size of a right angle"
+          ],
+          "Labels":[
+            "Consists of three points",
+            "Correct size"
+          ],
+          "Header":"Right Angle"
         },
         { "category":1,
           "shapeType":3,
           "angleType":0,
-          "specializedCategory":6
+          "specializedCategory":6,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A triangle only has three sides"
+          ],
+          "Labels":[
+            "Consists of a set of connected sides",
+            "Correct number of sides"
+          ],
+          "Header":"Triangle"
         },
         { "category":1,
           "shapeType":3,
           "angleType":0,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":["Connect the points so that they form a cycle",
+            "A triangle only has three sides",
+            "All sides must be equal"
+          ],
+          "Labels":[
+            "Consists of a set of connected sides",
+            "Correct number of sides",
+            "Correct length of sides"
+          ],
+          "Header":"Equilateral Triangle"
         },
         { "category":1,
           "shapeType":3,
           "angleType":0,
-          "specializedCategory":1
+          "specializedCategory":1,
+          "FeedBack":["Connect the points so that they form a cycle",
+            "A triangle only has three sides",
+            "At least two sides must be equal"
+          ],
+          "Labels":[
+            "Consists of a set of connected sides",
+            "Correct number of sides",
+            "Correct length of sides"
+          ],
+          "Header":"Isoceles Triangle"
         },
         { "category":1,
           "shapeType":3,
           "angleType":0,
-          "specializedCategory":2
+          "specializedCategory":2,
+          "FeedBack":["Connect the points so that they form a cycle",
+            "A triangle only has three sides",
+            "All sides must have a different length"
+          ],
+          "Labels":[
+            "Consists of a set of connected sides",
+            "Correct number of sides",
+            "Correct length of sides"
+          ],
+          "Header":"Scalene Triangle"
         },
         { "category":1,
           "shapeType":3,
           "angleType":0,
-          "specializedCategory":3
+          "specializedCategory":3,
+          "FeedBack":["Connect the points so that they form a cycle",
+            "A triangle only has three sides",
+            "All angles must be less than 90"
+          ],
+          "Labels":[
+            "Consists of a set of connected sides",
+            "Correct number of sides",
+            "Correct size of angle"
+          ],
+          "Header":"Acute Triangle"
         },
         { "category":1,
           "shapeType":3,
           "angleType":0,
-          "specializedCategory":4
+          "specializedCategory":4,
+          "FeedBack":["Connect the points so that they form a cycle",
+            "A triangle only has three sides",
+            "One angle must be greater than 90"
+          ],
+          "Labels":[
+            "Consists of a set of connected sides",
+            "Correct number of sides",
+            "Correct size of angle"
+          ],
+          "Header":"Obtuse Triangle"
         },
         { "category":1,
           "shapeType":3,
           "angleType":0,
-          "specializedCategory":5
+          "specializedCategory":5,
+          "FeedBack":["Connect the points so that they form a cycle",
+            "A triangle only has three sides",
+            "At least one angle must be 90 degrees"
+          ],
+          "Labels":[
+            "Consists of a set of connected sides",
+            "Correct number of sides",
+            "Correct size of angle"
+          ],
+          "Header":"Right Triangle"
         },
         { "category":1,
           "shapeType":4,
           "angleType":0,
-          "specializedCategory":6
+          "specializedCategory":6,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A quadrilateral has four sides"
+          ],
+          "Labels":[
+            "Consists of a side of connected sides",
+            "Correct Number of sides"
+          ],
+          "Header":"Quadrilateral"
         },
         {"category":1,
           "shapeType":4,
           "angleType":0,
-          "specializedCategory":0
-
+          "specializedCategory":0,
+          "FeedBack":[
+            "A quadrilateral has four sides",
+            "Opposite sides must be parallel",
+            "All angles must be 90 degrees",
+            "All angles must be equal"
+          ],
+          "Labels":[
+            "Correct Number of sides",
+            "Parallel sides",
+            "Correct angle size",
+            "Correct length of sides"
+          ],
+          "Header":"Square"
         },
         { "category":1,
           "shapeType":4,
           "angleType":0,
-          "specializedCategory":1
+          "specializedCategory":1,
+          "FeedBack":[
+            "A quadrilateral only has four sides",
+            "Opposite sides must be parallel",
+            "All angles must be 90 degrees"
+          ],
+          "Labels":[
+            "Correct Number of sides",
+            "Parallel sides",
+            "Correct angle size"
+          ],
+          "Header":"Rectangle"
         },
         { "category":1,
           "shapeType":4,
           "angleType":0,
-          "specializedCategory":2
+          "specializedCategory":2,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A quadrilateral has four sides",
+            "The diagonals must be perpendicular"
+          ],
+          "Labels":[
+            "Consists of a set of connected sides",
+            "Correct Number of sides",
+            "Diagonals are correct"
+          ],
+          "Header":"Kite"
         },
         { "category":1,
           "shapeType":4,
           "angleType":0,
-          "specializedCategory":3
+          "specializedCategory":3,
+          "FeedBack":[
+            "A quadrilateral only has four sides",
+            "Opposite sides must be parallel",
+            "All sides must be equal"
+          ],
+          "Labels":[
+            "Correct Number of sides",
+            "Parallel sides",
+            "Sides have correct lengths"
+          ],
+          "Header":"Rhombus"
         },
         { "category":1,
           "shapeType":4,
           "angleType":0,
-          "specializedCategory":4
+          "specializedCategory":4,
+          "FeedBack":[
+            "A quadrilateral only has four sides",
+            "Opposite sides must be parallel"
+          ],
+          "Labels":[
+            "Correct Number of sides",
+            "Parallel sides"
+          ],
+          "Header":"Parallelogram"
         },
         { "category":1,
           "shapeType":4,
           "angleType":0,
-          "specializedCategory":5
+          "specializedCategory":5,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A quadrilateral has four sides",
+            "A pair of sides must be parallel"
+          ],
+          "Labels":[
+            "Consists of a set of connected sides",
+            "Correct Number of sides",
+            "Parallel sides"
+          ],
+          "Header":"Trapezium"
         },
         { "category":1,
           "shapeType":5,
           "angleType":0,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A pentagon has five sides"
+          ],
+          "Labels":[
+            "Consists of a side of connected sides",
+            "Correct Number of sides"
+          ],
+          "Header":"Pentagon"
         },
         { "category":1,
           "shapeType":6,
           "angleType":0,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A hexagon has six sides"
+          ],
+          "Labels":[
+            "Consists of a side of connected sides",
+            "Correct Number of sides"
+          ],
+          "Header":"Hexagon"
         },
         { "category":1,
           "shapeType":7,
           "angleType":0,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A septagon has seven sides"
+          ],
+          "Labels":[
+            "Consists of a side of connected sides",
+            "Correct Number of sides"
+          ],
+          "Header":"Septagon"
         },
         { "category":1,
           "shapeType":8,
           "angleType":0,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A octagon has eight sides"
+          ],
+          "Labels":[
+            "Consists of a side of connected sides",
+            "Correct Number of sides"
+          ],
+          "Header":"Octagon"
         },
         { "category":1,
           "shapeType":9,
           "angleType":0,
-          "specializedCategory":0
+          "specializedCategory":0,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A nonagon has nine sides"
+          ],
+          "Labels":[
+            "Consists of a side of connected sides",
+            "Correct Number of sides"
+          ],
+          "Header":"Nonagon"
         },
         { "category":1,
           "shapeType":10,
           "angleType":0,
-          "specializedCategory":0
-        }]
+          "specializedCategory":0,
+          "FeedBack":[
+            "Connect the points so that they form a cycle",
+            "A decagon has ten sides"
+          ],
+          "Labels":[
+            "Consists of a side of connected sides",
+            "Correct Number of sides"
+          ],
+          "Header":"Decagon"
+        }
+      ]
     },
     {}
   ]

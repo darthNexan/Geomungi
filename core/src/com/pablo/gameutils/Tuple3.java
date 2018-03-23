@@ -12,11 +12,11 @@ public class Tuple3<X,Y,Z> {
     public final X x1;
     public final Y x2;
     public final Z x3;
-    @SuppressWarnings("SuspiciousNameCombination")
-    public Tuple3(X x, Y y, Z z){
-        x1= x;
-        x2 =y;
-        x3=z;
+
+    public Tuple3(X x1, Y x2, Z x3){
+        this.x1 =x1;
+        this.x2 =x2;
+        this.x3 =x3;
     }
 
 

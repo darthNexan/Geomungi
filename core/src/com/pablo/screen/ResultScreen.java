@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.BasicGameType;
 import com.pablo.gameutils.GameInfo;
@@ -31,9 +30,9 @@ import static java.lang.Math.ceil;
 @SuppressWarnings("JavaDoc")
 public class ResultScreen implements Screen {
     private BasicGameType type;
-    private Tuple2<Boolean,Boolean> res0;
-    private Tuple3<Boolean,Boolean,Boolean> res1;
-    private Tuple4<Boolean,Boolean,Boolean,Boolean> res2;
+    private Tuple2<Boolean,Boolean> tuple2;
+    private Tuple3<Boolean,Boolean,Boolean> tuple3;
+    private Tuple4<Boolean,Boolean,Boolean,Boolean> tuple4;
     private int score;
     private String[] messages;
     private MyGdxGame game;
@@ -79,51 +78,51 @@ public class ResultScreen implements Screen {
     /**
      * The constructor for a game with a tuple 3 result
      * @param type
-     * @param res1
+     * @param tuple3
      * @param game
      * @param prevScreen
      */
-    public ResultScreen(BasicGameType type, Tuple3<Boolean, Boolean, Boolean> res1, MyGdxGame game, BasicMiniGameScreen prevScreen) {
+    public ResultScreen(BasicGameType type, Tuple3<Boolean, Boolean, Boolean> tuple3, MyGdxGame game, BasicMiniGameScreen prevScreen) {
         this(game, prevScreen,type);
 
-        this.res1 = res1;
+        this.tuple3 = tuple3;
         calc();
-        isCorrect = res1.x1 && res1.x2 && res1.x3;
-        displayHintSprite=prevScreen.numberOfAttempts==0 && !isCorrect;
+
+
     }
 
     /**
      * The constructor for a game with a tuple 2 result
      * @param type
-     * @param res0
+     * @param tuple2
      * @param game
      * @param prevScreen
      */
-    public ResultScreen(BasicGameType type, Tuple2<Boolean, Boolean> res0 , MyGdxGame game, BasicMiniGameScreen prevScreen){
+    public ResultScreen(BasicGameType type, Tuple2<Boolean, Boolean> tuple2, MyGdxGame game, BasicMiniGameScreen prevScreen){
         this(game, prevScreen,type);
 
-        this.res0 = res0;
+        this.tuple2 = tuple2;
         calc();
-        isCorrect = res0.x1 && res0.x2;
-        displayHintSprite=prevScreen.numberOfAttempts==0 && !isCorrect;
 
-       //messages = new String[res0 == null? 3 : res1 ==null? 4:5];
+
+
+       //messages = new String[tuple2 == null? 3 : tuple3 ==null? 4:5];
 
     }
 
     /**
      * The constructor for a game with a tuple 4 result
      * @param type
-     * @param res2
+     * @param tuple4
      * @param game
      * @param prevScreen
      */
-    public ResultScreen(BasicGameType type, Tuple4<Boolean, Boolean, Boolean, Boolean> res2, MyGdxGame game, BasicMiniGameScreen prevScreen) {
+    public ResultScreen(BasicGameType type, Tuple4<Boolean, Boolean, Boolean, Boolean> tuple4, MyGdxGame game, BasicMiniGameScreen prevScreen) {
         this(game, prevScreen,type);
-        this.res2 = res2;
+        this.tuple4 = tuple4;
         calc();
-        isCorrect = res2.x1 && res2.x3 && res2.x2 && res2.x4;
-        displayHintSprite=prevScreen.numberOfAttempts==0 && !isCorrect;
+
+
 
     }
 
@@ -226,6 +225,9 @@ public class ResultScreen implements Screen {
                 calcScoreRes0();
             }
         }
+
+
+        displayHintSprite = prevScreen.numberOfAttempts ==0 && !isCorrect;
     }
 
     /**
@@ -235,78 +237,89 @@ public class ResultScreen implements Screen {
     private void calcScoreRes1(){
 
         messages = new String[4];
-        score += res1.x1 ? 10:0;
-        score += res1.x2 ? 10:0;
-        score += res1.x3 ? 10:0;
-        messages[0] = Integer.toString(res1.x1?10:0);
-        messages[1] = Integer.toString(res1.x2?10:0);
-        messages[2] = Integer.toString(res1.x3?10:0);
+        score += tuple3.x1 ? 10:0;
+        score += tuple3.x2 ? 10:0;
+        score += tuple3.x3 ? 10:0;
+        messages[0] = Integer.toString(tuple3.x1?10:0);
+        messages[1] = Integer.toString(tuple3.x2?10:0);
+        messages[2] = Integer.toString(tuple3.x3?10:0);
         messages[3] = Integer.toString(score);
+        isCorrect = tuple3.x1 && tuple3.x2 && tuple3.x3;
     }
 
 
     private void calcScoreRes0(){
 
         messages = new String[3];
-        score += res0.x1? 10:0;
-        messages[0] = Integer.toString(res0.x1? 10:0);
-        score += res0.x2? 10:0;
-        messages[1] = Integer.toString(res0.x2? 10:0);
+        score += tuple2.x1? 10:0;
+        messages[0] = Integer.toString(tuple2.x1? 10:0);
+        score += tuple2.x2? 10:0;
+        messages[1] = Integer.toString(tuple2.x2? 10:0);
         messages[2] = Integer.toString(score);
+
+        isCorrect = tuple2.x1 && tuple2.x2;
     }
 
     private void calcScoreSquare(){
 
         messages = new String[5];
-        score += res2.x1?10:0;
-        score += res2.x2?10:0;
-        score += res2.x3?10:0;
-        score += res2.x4?10:0;
+        score += tuple4.x1?10:0;
+        score += tuple4.x2?10:0;
+        score += tuple4.x3?10:0;
+        score += tuple4.x4?10:0;
 
-        messages[0] = Integer.toString(res2.x1?10:0);
-        messages[1] = Integer.toString(res2.x2?10:0);
-        messages[2] = Integer.toString(res2.x3?10:0);
-        messages[3] = Integer.toString(res2.x4?10:0);
+        messages[0] = Integer.toString(tuple4.x1?10:0);
+        messages[1] = Integer.toString(tuple4.x2?10:0);
+        messages[2] = Integer.toString(tuple4.x3?10:0);
+        messages[3] = Integer.toString(tuple4.x4?10:0);
         messages[4] = Integer.toString(score);
+
+        isCorrect = tuple4.x1 && tuple4.x2 && tuple4.x3 && tuple4.x4;
     }
 
     private void calcScoreRect(){
-
         messages = new String[4];
-        score += res2.x1?10:0;
-        score += res2.x2?10:0;
-        score += res2.x3?10:0;
+        score += tuple4.x1?10:0;
+        score += tuple4.x2?10:0;
+        score += tuple4.x3?10:0;
 
 
-        messages[0] = Integer.toString(res2.x1?10:0);
-        messages[1] = Integer.toString(res2.x2?10:0);
-        messages[2] = Integer.toString(res2.x3?10:0);
+        messages[0] = Integer.toString(tuple4.x1?10:0);
+        messages[1] = Integer.toString(tuple4.x2?10:0);
+        messages[2] = Integer.toString(tuple4.x3?10:0);
         messages[3] = Integer.toString(score);
+
+        isCorrect =tuple4.x1 && tuple4.x2 && tuple4.x3;
     }
 
     private void calcScoreRhombus(){
 
         messages = new String[4];
-        score += res2.x1?10:0;
-        score += res2.x2?10:0;
-        score += res2.x4?10:0;
+        score += tuple4.x1?10:0;
+        score += tuple4.x2?10:0;
+        score += tuple4.x4?10:0;
 
-        messages[0] = Integer.toString(res2.x1?10:0);
-        messages[1] = Integer.toString(res2.x2?10:0);
-        messages[2] = Integer.toString(res2.x4?10:0);
+        messages[0] = Integer.toString(tuple4.x1?10:0);
+        messages[1] = Integer.toString(tuple4.x2?10:0);
+        messages[2] = Integer.toString(tuple4.x4?10:0);
         messages[3] = Integer.toString(score);
+
+        isCorrect = tuple4.x1 && tuple4.x2 && tuple4.x4;
     }
 
 
     private void calcScoreParallelogram(){
 
         messages = new String[3];
-        score += res2.x1?10:0;
-        score += res2.x2?10:0;
-        messages[0] = Integer.toString(res2.x1?10:0);
-        messages[1] = Integer.toString(res2.x2?10:0);
+        score += tuple4.x1?10:0;
+        score += tuple4.x2?10:0;
+        messages[0] = Integer.toString(tuple4.x1?10:0);
+        messages[1] = Integer.toString(tuple4.x2?10:0);
 
-        messages[3] = Integer.toString(score);
+        messages[2] = Integer.toString(score);
+
+
+        isCorrect = tuple4.x1 && tuple4.x2;
     }
 
 
@@ -385,7 +398,15 @@ public class ResultScreen implements Screen {
 
             if (retrySprite.getBoundingRectangle().contains(x,y) && displayHint == displayHintSprite){
                 if (!isCorrect) prevScreen.numberOfAttempts --;//if the correct answer was not supplied reduce the number of tries remaining
-                if (displayHint) prevScreen.numberOfAttempts =GameInfo.No_OF_ATTEMPTS;
+                else prevScreen.init();
+
+
+                if (displayHint) {
+                    prevScreen.numberOfAttempts = GameInfo.No_OF_ATTEMPTS;
+                    prevScreen.init();
+                }
+
+
                 game.setScreen(prevScreen);
                 this.dispose();
             }
@@ -393,6 +414,7 @@ public class ResultScreen implements Screen {
                 prevScreen.totalScore += score;//increase the player score and move to the next level
                 prevScreen.currStages = (prevScreen.currStages + 1) % prevScreen.NUMBER_OF_LEVELS;
                 prevScreen.numberOfAttempts = GameInfo.No_OF_ATTEMPTS;
+                prevScreen.init();
                 game.setScreen(prevScreen);
                 this.dispose();
             }
@@ -425,7 +447,7 @@ public class ResultScreen implements Screen {
         if (isCorrect){
             fontReg.draw(batch,"Awesometacular!",initialX,initialY - (deltaY * (i+1)));
         }
-        else if (!displayHintSprite && !isCorrect){
+        else if (!displayHintSprite){
             fontReg.draw(batch,"Sorry could you try again?",initialX,initialY - (deltaY * (i+1)));
         }
         else if(displayHint){

@@ -1,6 +1,8 @@
 package com.pablo.gameutils;
 
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
@@ -38,6 +40,7 @@ public class ShapeGeneration {
 
             if (type.isTriangle()){
                 if (type.isType0()) {
+                    Gdx.app.log("Type is:", "Acute Angle");
                     res = generateTriangle(50f,50f,60);
                 }
                 else if (type.isType1()){
@@ -49,8 +52,8 @@ public class ShapeGeneration {
                     res = generateTriangle(50f,35f, angle);
                 }
                 else if (type.isType3()){
-                    float angle = 20f + GameInfo.random.nextInt(40);
-                    res = generateTriangle(40,60,angle);
+                    float angle = 20f + GameInfo.random.nextInt(30);
+                    res = generateTriangle(60,60,angle);
                 }
                 else if (type.isType4()){
                     float angle = 100f + GameInfo.random.nextInt(50);
@@ -97,6 +100,7 @@ public class ShapeGeneration {
         }
         else throw new IllegalArgumentException("Basic Game Type is not correctly defined");
 
+        addPoints(res,2);
         return res;
     }//generate
     /**
@@ -192,38 +196,49 @@ public class ShapeGeneration {
      * @return
      */
     private static Vector<Vector2> generateKitePoints(float length, float width){
-        float angleToUse = (float)GameInfo.random.nextInt(360);
-        angleToUse = 0f;
-        int scale = (int)GameInfo.CAMERA_WIDTH/5;
-        float topAngle = (float)GameInfo.random.nextInt(25) +20;
-        Vector2 lineRight = new Vector2(1,0);
-        Vector2 lineLeft = new Vector2(1,0);
-        lineRight.scl(scale);
-        lineLeft.scl(scale);
-        lineRight.rotate(topAngle + 270);
-        lineLeft.rotate(270-topAngle);
-
-        Vector2 temp0 = new Vector2(GameInfo.random.nextInt(6*(int)GameInfo.CAMERA_WIDTH)/8 +
-                GameInfo.CAMERA_WIDTH/8, GameInfo.random.nextInt((int)GameInfo.CAMERA_HEIGHT - (int)GameInfo.CAMERA_HEIGHT/2) +
-                GameInfo.CAMERA_HEIGHT/2);
-
-        Vector2 temp1 = new Vector2(temp0.x, temp0.y);
-        temp1.sub(0,scale * 2.2f);
-
-        Vector2 temp3 = new Vector2(temp0.x,temp0.y);
-        temp3.add(lineRight);
-        Vector2 temp4 = new Vector2(temp0.x,temp0.y);
-        temp4.add(lineLeft);
-
         Vector<Vector2> v = new Vector<Vector2>();
+        Vector2 temp0, temp1,temp2,temp3;
+
+        do {
+            float angleToUse = (float) GameInfo.random.nextInt(360);
+            angleToUse = 0f;
+            int scale = (int) GameInfo.CAMERA_WIDTH / 5;
+            float topAngle = (float) GameInfo.random.nextInt(25) + 20;
+            Vector2 lineRight = new Vector2(1, 0);
+            Vector2 lineLeft = new Vector2(1, 0);
+            lineRight.scl(scale);
+            lineLeft.scl(scale);
+            lineRight.rotate(topAngle + 270);
+            lineLeft.rotate(270 - topAngle);
+
+            temp0 = new Vector2(GameInfo.random.nextInt(6 * (int) GameInfo.CAMERA_WIDTH) / 8 +
+                    GameInfo.CAMERA_WIDTH / 8, GameInfo.random.nextInt((int) GameInfo.CAMERA_HEIGHT - (int) GameInfo.CAMERA_HEIGHT / 2) +
+                    GameInfo.CAMERA_HEIGHT / 2);
+
+            temp1 = new Vector2(temp0.x, temp0.y);
+            temp1.sub(0, scale * 2.2f);
+
+            temp2 = new Vector2(temp0.x, temp0.y);
+            temp2.add(lineRight);
+            temp3 = new Vector2(temp0.x, temp0.y);
+            temp3.add(lineLeft);
+        }while (!checkVisibility(temp0) || !checkVisibility(temp1) || !checkVisibility(temp2) ||!checkVisibility(temp3));
 
         v.add(temp0);
         v.add(temp1);
+        v.add(temp2);
         v.add(temp3);
-        v.add(temp4);
 
         return v;
     }//generateKite
+
+    /**
+     * Generates Parallelogram
+     * @param angle0
+     * @param base
+     * @param height
+     * @return
+     */
 
     public static Vector<Vector2> generateParallelogram(float angle0,  final float base, final float height){
 
@@ -268,7 +283,13 @@ public class ShapeGeneration {
 
     }
 
-
+    /**
+     * Generates trapezium
+     * @param a
+     * @param b
+     * @param height
+     * @return
+     */
     public static Vector<Vector2> generateTrapezium (float a, float b, float height) {
 
         Vector<Vector2> v = new Vector<Vector2>();
@@ -330,6 +351,13 @@ public class ShapeGeneration {
         return v;
     }
 
+    /**
+     * Generates triangle
+     * @param a
+     * @param b
+     * @param angle0
+     * @return
+     */
     public static Vector <Vector2> generateTriangle(float a, float b,  float angle0){
 
         Vector2 initalPoint = new Vector2();
@@ -339,10 +367,9 @@ public class ShapeGeneration {
         Vector2 point0 = new Vector2();
         Vector2 point1 = new Vector2();
 
-        //noinspection StatementWithEmptyBody
         do{
 
-            int angleToUse = GameInfo.random.nextInt(360);
+            int angleToUse = GameInfo.random.nextInt(180);
             initalPoint.x = GameInfo.random.nextInt((int) Math.floor(GameInfo.CAMERA_WIDTH));
             initalPoint.y = GameInfo.random.nextInt((int) Math.floor(GameInfo.CAMERA_HEIGHT));
 
@@ -374,6 +401,11 @@ public class ShapeGeneration {
         return vector;
     }
 
+    /**
+     * Generates a generic shape given the number of points
+     * @param sides
+     * @return
+     */
     public static Vector<Vector2> generateShape(final int sides){
 
         final float totalAngles = 180f + (sides - 3) * 180f;
@@ -397,7 +429,7 @@ public class ShapeGeneration {
             while (tempSides > 0){
                 float angle = sides > 1 ? GameInfo.random.nextInt(140) + 30f: tempAngles;
                 tempAngles-= angle;
-                line.setLength(GameInfo.random.nextInt(20) + 40f);
+                line.setLength(GameInfo.random.nextInt(20) + 20f);
                 line.rotate(angle);
                 Vector2 temp = new Vector2(v.lastElement());
                 temp.add(line);
@@ -409,23 +441,70 @@ public class ShapeGeneration {
         return v;
     }
 
+
+    /**
+     * Checks the visibility of all the points in vector v
+     * @param v
+     * @return
+     */
     private static boolean checkAllVisibility(final Vector<Vector2> v){
 
         boolean res = true;
         int i = 0;
-        while (res && i<v.size() ){
+        while (res && i<v.size()){
             res = checkVisibility(v.get(i));
             System.out.println(res);
             i++;
         }
-
-
         return res;
     }
 
+    /**
+     * Checks the visibility of the point vector2
+     * @param vector2
+     * @return
+     */
     private static boolean checkVisibility(Vector2 vector2){
 
-        return vector2.x >1 && vector2.x<GameInfo.CAMERA_WIDTH && vector2.y >1 && vector2.y <GameInfo.CAMERA_HEIGHT ;
+        return vector2.x > (GameInfo.CAMERA_WIDTH * (1f/8f)) && vector2.x< (GameInfo.CAMERA_WIDTH * (7f/8f)) &&
+                vector2.y > (GameInfo.CAMERA_HEIGHT * (1f/8f)) && vector2.y < (GameInfo.CAMERA_HEIGHT * (7f/8f)) ;
     }
 
+
+    /**
+     * Adds points to make the solution less obvious
+     * @param v
+     * @param num
+     */
+    private static void addPoints(Vector<Vector2> v, int num){
+
+        int initialSize = v.size();
+        do {
+            Vector2 temp = new Vector2(GameInfo.CAMERA_WIDTH * GameInfo.random.nextFloat(), GameInfo.CAMERA_HEIGHT * GameInfo.random.nextFloat());
+            if (checkVisibility(temp) && checkSpacing(v,temp,10f))
+                v.add(temp);
+
+        }while (v.size() < num + initialSize);
+
+    }
+
+
+    /**
+     * Ensures that there is a distance greater than the min distance between every point in v and  a.
+     * @param v
+     * @param a
+     * @param minDistance
+     * @return
+     */
+    private static boolean checkSpacing(Vector<Vector2> v, Vector2 a, float minDistance){
+
+        for (int i = 0; i < v.size();i++){
+
+            if (v.get(i).dst(a) < minDistance)
+                return false;
+        }
+
+        return true;
+
+    }
 }

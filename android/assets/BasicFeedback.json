@@ -9,7 +9,7 @@
     ],
     "Labels":[
       "Consists of at least two lines",
-      "Lines must never meet"
+      "If extended lines must never meet"
     ],
     "Header":"Parallel Lines"
   },

@@ -1,5 +1,6 @@
 package com.pablo.gameutils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import java.util.Vector;
@@ -42,7 +43,7 @@ public class ShapeIdentification {
      * @return A boolean indicating whether the two values are approximately equal.
      */
     public static boolean isApproxEqual(float a, float b){
-        return isApproxEqual(a,b,0.1f);
+        return isApproxEqual(a,b,0.5f);
     }
 
     /**
@@ -72,10 +73,26 @@ public class ShapeIdentification {
 
     public static boolean identifyParallelLines(Vector<Vector2> a, Vector<Vector2> b){
 
-        Vector2 v1 = new Vector2(a.firstElement().x - a.lastElement().x, a.firstElement().y - a.lastElement().y);
-        Vector2 v2 = new Vector2(b.firstElement().x - b.lastElement().x , b.firstElement().y - b.lastElement().y);
+        if (a.isEmpty() || b.isEmpty())
+            return false;
 
-        return v1.hasSameDirection(v2) || v1.hasOppositeDirection(v2);
+
+        for (Vector2 v: a)
+            Gdx.app.log("Value of vector:",v.toString());
+
+        for (Vector2 v: b)
+            Gdx.app.log("Value of vector:",v.toString());
+
+        Vector2 v1 = new Vector2(a.firstElement());
+        Vector2 v2 = new Vector2(b.firstElement());
+        v1.sub(a.get(1));
+        v2.sub(b.get(1));
+
+        Gdx.app.log("V1", v1.nor().toString());
+        Gdx.app.log("V2", v2.nor().toString());
+
+
+        return isApproxEqual(abs(v1.nor().x), abs(v2.nor().x)) && isApproxEqual(abs(v2.nor().y), abs(v1.nor().y));
     }
 
 
@@ -125,62 +142,50 @@ public class ShapeIdentification {
 
     /**
      * Compresses a collection of lines into one vector
-     * @param lines lines to compress
+     * @param lines lines to merge
      * @return
      */
-    public static Tuple2<Vector<Vector2>, Boolean> compress(Vector<Vector<Vector2>> lines){
+    public static Vector<Vector2> merge(Vector<Vector<Vector2>> lines){
 
-        if (lines.isEmpty()){
-            return new Tuple2<Vector<Vector2>, Boolean>(null,false);
+        Vector<Vector2> v = new Vector<Vector2>();
+        Vector<Vector2> temp =null;
+        v.addAll(lines.get(0));
+        lines.remove(0);
+        int i=0;
+        while (!lines.isEmpty()){
+            temp = lines.get(i);
+            int matchingLocationA = temp.contains(v.firstElement()) ? temp.indexOf(v.firstElement())
+                    : temp.indexOf(v.lastElement());
+            int matchingLocationB = v.contains(temp.firstElement()) ? v.indexOf(temp.firstElement()):
+                    v.indexOf(temp.lastElement());
+
+            if (matchingLocationA != -1) {
+                performMerge(temp,v,matchingLocationA,matchingLocationB);
+                lines.remove(i);
+            }
+            else {
+                i = (i + 1)  % lines.size();
+            }
         }
 
-        Vector<Vector<Vector2>> linesCopy = (Vector<Vector<Vector2>>) lines.clone();
+        return v;
+    }
 
 
-        Vector<Vector2> points = new Vector<Vector2>();
-        points.addAll(linesCopy.firstElement());
-        linesCopy.remove(0);
-        int i;
-
-        do{
-            i=0;
-
-            while (i < linesCopy.size() ){
-
-                if(linesCopy.get(i).firstElement().equals(points.lastElement())){
-                    linesCopy.get(i).remove(0);
-                    points.addAll(points.size() -1,linesCopy.get(i));
-                    linesCopy.remove(i);
-                    break;
-                }
-                else if( linesCopy.get(i).lastElement().equals(points.lastElement())){
-                    linesCopy.get(i).remove(linesCopy.get(i).size() -1 );
-                    points.addAll(points.size() -1, linesCopy.get(i));
-                    linesCopy.remove(i);
-                    break;
-                }
-                else if(linesCopy.get(i).firstElement().equals(points.firstElement())){
-                    linesCopy.get(i).remove(0);
-                    points.addAll(0, linesCopy.get(i));
-                    linesCopy.remove(i);
-                    break;
-                }
-                else if(linesCopy.get(i).lastElement().equals(points.firstElement()) ){
-                    linesCopy.get(i).remove(linesCopy.get(i).size() - 1);
-                    points.addAll(0, linesCopy.get(i));
-                    linesCopy.remove(i);
-                    break;
-                }
-                else{
-                    i++;
-                }
-            }
+    /**
+     *
+     * @param a the vector in which the matching location originates
+     * @param b the vector in which the elementts are added
+     * @param matchingLocationA the location that has a common element
+     * @return
+     */
+    public static Vector<Vector2> performMerge(Vector<Vector2>a,Vector<Vector2>b,int matchingLocationA, int matchingLocationB){
 
 
-        }while (!linesCopy.isEmpty() && linesCopy.size()>i);
-
-
-        return new Tuple2<Vector<Vector2>, Boolean>(points, i<linesCopy.size());
+        for (int i = (matchingLocationA + 1) % a.size(); i != matchingLocationA; i= (i+1) % matchingLocationA){
+            b.add(a.get(i));
+        }
+        return b;
     }
 
     /**
@@ -207,10 +212,9 @@ public class ShapeIdentification {
         bc.sub(b);
         ac.sub(c);
 
-        float angle = abs(180f - (abs(ab.angle(ac)) + abs(bc.angle(ac))));
         //System.out.println(angle);
 
-        return angle;
+        return abs(180f - (abs(ab.angle(ac)) + abs(bc.angle(ac))));
     }
 
 
@@ -372,8 +376,9 @@ public class ShapeIdentification {
      *         the second states whether the quad is a kite
      */
     public static Tuple3<Boolean,Boolean,Boolean> checkKite(Vector<Vector2> points){
-        boolean res2 = points.lastElement().equals(points.firstElement());
 
+
+        boolean res2 = points.size() > 2 && points.lastElement().equals(points.firstElement());
         boolean res0= points.size() == 5 && res2;
         boolean res1 = false;
 
@@ -405,26 +410,48 @@ public class ShapeIdentification {
      *          the third whether it is a trapezium
      */
     public static Tuple3<Boolean,Boolean,Boolean> checkTrapezium(Vector<Vector2> points){
-        boolean res0 = points.firstElement().equals(points.lastElement());
+        boolean res0 = points.size() > 2 && points.firstElement().equals(points.lastElement());
         boolean res1 = points.size() == 5 && res0;
         boolean res2=false;
 
         if (res1){
-            Vector<Vector2> a = new Vector<Vector2>();
-            a.add(points.get(0));
-            a.add(points.get(1));
-            Vector<Vector2> b = new Vector<Vector2>();
-            b.add(points.get(2));
-            b.add(points.get(3));
+//            Gdx.app.log("res1","Must be true");
+//            Vector<Vector2> l1 = new Vector<Vector2>();
+//            l1.add(points.get(0));
+//            l1.add(points.get(1));
+//            Vector<Vector2> l2 = new Vector<Vector2>();
+//            l2.add(points.get(2));
+//            l2.add(points.get(3));
+//
+//
+//            Vector<Vector2> l3 = new Vector<Vector2>();
+//            l3.add(points.get(3));
+//            l3.add(points.get(4));
+//            Vector<Vector2> l4 = new Vector<Vector2>();
+//            l4.add(points.get(1));
+//            l4.add(points.get(2));
+//
+//
+//            res2 = identifyParallelLines(l1, l2) || identifyParallelLines(l3,l4);
 
-            Vector<Vector2> c = new Vector<Vector2>();
-            c.add(points.get(3));
-            c.add(points.get(4));
-            Vector<Vector2> d = new Vector<Vector2>();
-            d.add(points.get(1));
-            d.add(points.get(2));
+            Vector2 a,b,c,d;
 
-            res2 = identifyParallelLines(a,b) || identifyParallelLines(c,d);
+            a = new Vector2(points.get(0));
+            a.sub(points.get(1));
+
+            b = new Vector2(points.get(3));
+            b.sub(points.get(4));
+
+            c = new Vector2(points.get(4));
+            c.sub(points.get(0));
+
+            d = new Vector2(points.get(1));
+            d.sub(points.get(2));
+
+
+            res2 = a.hasOppositeDirection(b) || a.hasSameDirection(b) ||
+                    c.hasOppositeDirection(d) || c.hasSameDirection(d);
+
         }
 
         return new Tuple3<Boolean,Boolean,Boolean>(res0,res1,res2);

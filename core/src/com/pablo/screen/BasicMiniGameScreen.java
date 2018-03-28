@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -32,6 +33,7 @@ import com.pablo.input.BasicsInput;
 import java.util.ArrayList;
 import java.util.Vector;
 import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
 
 /**
  * Created by Dennis on 04/02/2018.
@@ -99,7 +101,7 @@ public class BasicMiniGameScreen implements Screen {
         currentPoint = new Vector2(-1,-1);
         Gdx.input.setInputProcessor(new BasicsInput(currentPoint, this));
         gameStages = BasicGameType.getGameTypes();
-        currStages = 0;
+        currStages =16;
         init();
         NUMBER_OF_LEVELS = gameStages.size();
 
@@ -154,7 +156,7 @@ public class BasicMiniGameScreen implements Screen {
     /**
      * Sets up new game
      */
-    private void init(){
+    void init(){
         if (currStages>gameStages.size()-1) {
             currStages =0;
         }
@@ -167,9 +169,17 @@ public class BasicMiniGameScreen implements Screen {
     }
     @Override
     public void show() {
-        init();
+        clear();
     }
 
+
+    /**
+     * Clears the selected points
+      */
+    public void clear(){
+        selectedPoints.clear();
+        selectedPoints.add(new Vector<Vector2>());
+    }
     /**
      * Tests the selected points to determine whether it matches the correct result
      * @return a boolean indicating whether the puzzle was successfully completed
@@ -182,10 +192,17 @@ public class BasicMiniGameScreen implements Screen {
         if (basicGameType.isParallel()){
 
             boolean firstTest = selectedPoints.size() == 3;
-            Tuple2<Boolean, Boolean> res = new Tuple2<Boolean, Boolean>(firstTest &&
+            Tuple2<Boolean, Boolean> res;
+            if(firstTest && selectedPoints.firstElement().size() == 2){
+
+                res = new Tuple2<Boolean, Boolean>(firstTest &&
                     selectedPoints.get(0).size() == 2 && selectedPoints.get(1).size() == 2 && selectedPoints.get(2).isEmpty(),
                     firstTest && ShapeIdentification.identifyParallelLines(selectedPoints.firstElement(), selectedPoints.get(1)));
 
+            Gdx.app.log("Check parallel ",ShapeIdentification.identifyParallelLines(selectedPoints.get(0),selectedPoints.get(1))+"");
+            }
+            else
+                res = new Tuple2<Boolean, Boolean>(selectedPoints.firstElement().size()>=3,false);
 
             goToResultScreen(res);
 
@@ -256,17 +273,22 @@ public class BasicMiniGameScreen implements Screen {
 
                 }else if (basicGameType.isType1()){
                     quadRes1 = ShapeIdentification.checkParallelogram(selectedPoints.firstElement(),true,false);
+
                 }else if (basicGameType.isType2()){
                     quadRes2 = ShapeIdentification.checkKite(selectedPoints.firstElement());
                 }else if(basicGameType.isType3()){
                     quadRes1 = ShapeIdentification.checkParallelogram(selectedPoints.firstElement(),false,true);
+
                 }else if(basicGameType.isType4()){
                     quadRes1 = ShapeIdentification.checkParallelogram(selectedPoints.firstElement(),false,false);
+
                 }else if(basicGameType.isType5()){
                     quadRes2 = ShapeIdentification.checkTrapezium(selectedPoints.firstElement());
+
                 }
                 else {
                     quadRes3 = ShapeIdentification.checkShape(selectedPoints.firstElement(), basicGameType);
+
                 }
 
                 if (!(quadRes1 == null)){
@@ -401,7 +423,7 @@ public class BasicMiniGameScreen implements Screen {
         if(currentPoint.x==-1 && selectedPoints.get(selectedPoints.size()-1).size() == 1 ){
             selectedPoints.get(selectedPoints.size()-1).clear();
         }
-        if (currentPoint.x ==-1 && !selectedPoints.get(selectedPoints.size()-1).isEmpty()&& basicGameType.isParallel()){
+        if (currentPoint.x ==-1 && !selectedPoints.get(selectedPoints.size()-1).isEmpty() && basicGameType.isParallel()){
 
             selectedPoints.add(new Vector<Vector2>());
         }//if composed of several lines add a new vector

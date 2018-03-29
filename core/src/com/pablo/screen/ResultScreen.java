@@ -412,7 +412,7 @@ public class ResultScreen implements Screen {
             }
             else if (isCorrect&&!displayHintSprite &&nextSprite.getBoundingRectangle().contains(x,y)){
                 prevScreen.totalScore += score;//increase the player score and move to the next level
-                prevScreen.currStages = (prevScreen.currStages + 1) % prevScreen.NUMBER_OF_LEVELS;
+                prevScreen.setStage((prevScreen.getStage() + 1) % prevScreen.NUMBER_OF_LEVELS);
                 prevScreen.numberOfAttempts = GameInfo.No_OF_ATTEMPTS;
                 prevScreen.init();
                 game.setScreen(prevScreen);

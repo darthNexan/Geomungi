@@ -1,16 +1,20 @@
 package com.pablo.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pablo.gameutils.BasicGameType;
 import com.pablo.screen.BasicMiniGameScreen;
+import com.pablo.screen.MenuScreen;
 
 public class MyGdxGame extends Game {
 	private  SpriteBatch batch;
 
 	private OrthographicCamera camera;
+	private MenuScreen menuScreen;
+
 
 
 
@@ -26,11 +30,10 @@ public class MyGdxGame extends Game {
 		camera = new OrthographicCamera(com.pablo.gameutils.GameInfo.CAMERA_WIDTH, com.pablo.gameutils.GameInfo.CAMERA_HEIGHT);
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
+		menuScreen = new MenuScreen(this);
 
-
-
-		Screen screen = new BasicMiniGameScreen(this);
-		setScreen(screen);
+		Gdx.input.setCatchBackKey(true);
+		setScreen(menuScreen);
 
 
 	}
@@ -56,4 +59,8 @@ public class MyGdxGame extends Game {
 	public OrthographicCamera getCamera(){
 		return this.camera;
 	}
+	public void backToMenu(){
+		this.setScreen(menuScreen);
+	}
+
 }

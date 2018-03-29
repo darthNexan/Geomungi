@@ -14,15 +14,15 @@ import static java.lang.Math.ceil;
 
 public final class Utilities {
 
-    private BitmapFont generateFont(int size, Color color){
+    public BitmapFont generateFont(int size, Color outlineColor, Color fillColor, float borderWidth){
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Karma.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         Tuple2<Integer,Float> scale = scaleHelper(size);
-        parameter.color = color;
+        parameter.color = fillColor;
         parameter.size = scale.x1;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 2f;
+        parameter.borderColor = outlineColor;
+        parameter.borderWidth = borderWidth;
         parameter.minFilter = Texture.TextureFilter.Linear;
         parameter.magFilter = Texture.TextureFilter.Linear;
         parameter.mono=true;
@@ -31,6 +31,7 @@ public final class Utilities {
         BitmapFont font = generator.generateFont(parameter);
         font.setUseIntegerPositions(false);
         font.getData().setScale(scale.x2);
+        generator.dispose();
         return font;
     }
 

@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Dennis on 26/02/2018.
  */
 
-public class Tuple4 <W,X,Y,Z> {
+public class Tuple4 <W,X,Y,Z> extends Tuple{
     public final W x1;
     public final X x2;
     public final Y x3;

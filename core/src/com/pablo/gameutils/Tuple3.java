@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Dennis on 25/02/2018.
  */
 
-public class Tuple3<X,Y,Z> {
+public class Tuple3<X,Y,Z> extends Tuple{
 
     public final X x1;
     public final Y x2;

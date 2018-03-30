@@ -106,7 +106,7 @@ public class BasicMiniGameScreen implements Screen {
         selectedPoints.add(new Vector<Vector2>());
         currentPoint = new Vector2(-1,-1);
         Gdx.input.setInputProcessor(new BasicsInput(currentPoint, this));
-        gameStages = BasicGameType.getGameTypes();
+        gameStages = this.game.gameTypes();
 
         init();
         NUMBER_OF_LEVELS = gameStages.size();

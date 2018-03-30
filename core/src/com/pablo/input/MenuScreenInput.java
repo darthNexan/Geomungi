@@ -1,14 +1,12 @@
 package com.pablo.input;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.pablo.gameutils.GameInfo;
 import com.pablo.screen.BasicMiniGameScreen;
-import com.pablo.screen.MenuScreen;
+import com.pablo.screen.LevelSelectionScreen;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.scalb;
@@ -19,9 +17,9 @@ import static java.lang.Math.scalb;
 
 public class MenuScreenInput implements GestureDetector.GestureListener {
 
-    private MenuScreen screen;
+    private LevelSelectionScreen screen;
 
-    public MenuScreenInput(MenuScreen screen){
+    public MenuScreenInput(LevelSelectionScreen screen){
         this.screen = screen;
 
     }

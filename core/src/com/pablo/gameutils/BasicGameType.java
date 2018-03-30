@@ -26,13 +26,14 @@ public class BasicGameType {
     public final int specializedCategory; //for use with scalene, equilateral, isosceles, right angle, acute and obtuse triangles
     //also for types of quadrilaterals parallelogram, rhombus, square, trapezoid, kite, rectangle
     public String header;
+    public ArrayList<Tuple> userResults;// A tuple that contains the results a user got on any given level
     /**
      * Returns a fully constructed game mode
      */
     public BasicGameType(){
         Random random = GameInfo.random;
 
-
+        userResults = new ArrayList<Tuple>();
         category = random.nextInt(3);
 
         if(category == 1){
@@ -211,5 +212,13 @@ public class BasicGameType {
     public int getSpecializedCategory() {
         return specializedCategory;
     }
+
+    public void addToResults(Tuple tuple){
+        userResults.add(tuple);
+    }
+    public ArrayList<Tuple> getResults(){
+        return userResults;
+    }
+
 }//BasicGameType
 

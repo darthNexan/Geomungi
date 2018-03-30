@@ -1,94 +1,81 @@
 package com.pablo.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.GameInfo;
-import com.pablo.gameutils.Tuple2;
-import com.pablo.input.MenuScreenInput;
+import com.pablo.gameutils.Utilities;
 
-import java.util.ArrayList;
+import static java.lang.Math.abs;
+import static java.lang.Math.floor;
 
-import static java.lang.Math.ceil;
 
 /**
- * Created by Dennis on 28/03/2018.
+ * Created by Dennis on 29/03/2018.
  */
 
 public class MenuScreen implements Screen {
 
+
+    private MyGdxGame game;
+    private GestureDetector detector;
     private SpriteBatch batch;
+    private Camera camera;
     private BitmapFont font;
-    Camera camera;
-    public MyGdxGame game;
 
-    ShapeRenderer shapeRenderer;
-    public Rectangle[] textBox;
-
-    public ArrayList<String> levelNames;
-    GestureDetector detector;
-
-
+    private Rectangle[] textBoxes;
+    private String[] options;
+    private ShapeRenderer shapeRenderer;
 
     public MenuScreen(MyGdxGame game){
-        this.batch = game.getBatch();
-        this.camera = game.getCamera();
         this.game = game;
-        this.shapeRenderer = new ShapeRenderer();
-        detector =new GestureDetector(new MenuScreenInput(this));
-        Gdx.input.setInputProcessor(detector);
+        batch = game.getBatch();
+        camera = game.getCamera();
+        font = Utilities.generateFont(12, Color.BLACK, Color.WHITE, 2f);
 
-        init();
-    }
+        options = new String[]{"Basics", "View Progress"};
 
-    private void generateFont(){
+        float rectangleHeight = 30f;
+        float rectangleWidth = 80f;
+        float x = GameInfo.CAMERA_WIDTH/2;
+        float y = GameInfo.CAMERA_HEIGHT/2;
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Karma.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        Tuple2<Integer,Float> scale = scaleHelper(6);
-        parameter.color = Color.WHITE;
-        parameter.size = scale.x1;
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 2f;
-        parameter.minFilter = Texture.TextureFilter.Linear;
-        parameter.magFilter = Texture.TextureFilter.Linear;
-        parameter.mono=true;
-        parameter.mono = true;
+        textBoxes= new Rectangle[]{
+                new Rectangle(x - rectangleWidth/2, y + rectangleHeight + 10f, rectangleWidth, rectangleHeight),
+                new Rectangle(x - rectangleWidth/2, y - (rectangleHeight + 10f), rectangleWidth, rectangleHeight),
+        };
 
-        font = generator.generateFont(parameter);
-        font.setUseIntegerPositions(false);
-        font.getData().setScale(scale.x2);
+        Gdx.input.setInputProcessor(null);
 
     }
-    private Tuple2<Integer,Float> scaleHelper(final int size){
-        Integer sizeRes = (int)ceil(size * (Gdx.graphics.getHeight() / GameInfo.CAMERA_HEIGHT));
-        Float scaleRes =GameInfo.CAMERA_HEIGHT/Gdx.graphics.getHeight();
-        return new Tuple2<Integer,Float>(sizeRes, scaleRes);
-    }
-
-
+    /**
+     * Called when this screen becomes the current screen for a {@link Game}.
+     */
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(detector);
+
     }
 
+    /**
+     * Called when the screen should render itself.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
 
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -99,104 +86,91 @@ public class MenuScreen implements Screen {
 
 
 
-        for (Rectangle aTextBox : textBox) {
+        //render text box for menu items
+        for (Rectangle aTextBox : textBoxes) {
 
-            shapeRenderer.rect(aTextBox.x, aTextBox.y, aTextBox.width, aTextBox.height);
-
+            if (aTextBox.y > -1*(aTextBox.height) && aTextBox.y<GameInfo.CAMERA_HEIGHT) // if the box is not on the screen  don't display
+                shapeRenderer.rect(aTextBox.x, aTextBox.y, aTextBox.width, aTextBox.height);
 
         }
 
         shapeRenderer.end();
 
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        for (int i = 0; i<textBox.length;i++){
-            Rectangle aTextBox = textBox[i];
+        for (int i =0 ; i< textBoxes.length;i++){
+            Rectangle aTextBox = textBoxes[i];
 
-
-            font.draw(batch,levelNames.get(i),aTextBox.x + aTextBox.width/4,aTextBox.y + aTextBox.height/2,
-                    aTextBox.width, Align.left, true);
-
-
+            if (aTextBox.y > -1*aTextBox.height && aTextBox.y<GameInfo.CAMERA_HEIGHT) //if the box is not on the screen don't display the text
+                font.draw(batch,options[i],aTextBox.x + aTextBox.width/4,aTextBox.y + aTextBox.height/2,
+                        aTextBox.width, Align.left, true);
         }
 
         batch.end();
+
+
+
+
+
+
     }
 
+    /**
+     * @param width
+     * @param height
+     *
+     */
     @Override
     public void resize(int width, int height) {
 
     }
 
+    /**
+     *
+     */
     @Override
     public void pause() {
 
     }
 
+    /**
+     *
+     */
     @Override
     public void resume() {
 
     }
 
+    /**
+     * Called when this screen is no longer the current screen for a {@link Game}.
+     */
     @Override
     public void hide() {
 
     }
 
+    /**
+     * Called when this screen should release all resources.
+     */
     @Override
     public void dispose() {
 
     }
 
 
-    public void readJson(){
+    public void checkInput(){
+        float x =  Gdx.input.getX();
+        float y = Gdx.input.getY();
+        float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
+        float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
 
-        levelNames = new ArrayList<String>();
-        JsonReader reader = new JsonReader();
-
-        JsonValue value = reader.parse(Gdx.files.internal("BasicFeedback.json"));
-
-        JsonValue.JsonIterator iterator = value.iterator();
-        String currentValue =null;
-
-        while (iterator.hasNext()){
-            currentValue = iterator.next().getString("Header");
-            levelNames.add(currentValue);
+        if (textBoxes[0].contains(newX,newY)) {
+            game.setScreen(new LevelSelectionScreen(this.game));
         }
-
-    }
-
-    public void createRectangles(){
-        if (levelNames != null) {
-            textBox = new Rectangle[levelNames.size()];
-            int i = 0;
-
-            float x = GameInfo.CAMERA_WIDTH/2;
-            float y = GameInfo.CAMERA_HEIGHT - 10f;
-            float width =80f ;
-            float height =30f ;
-
-
-            while ( i < textBox.length){
-                textBox[i] = new Rectangle(x - width/2, y,width,height);
-
-                y -= (height + 5f);
-                i++;
-
-
-            }
+        else if (textBoxes[1].contains(newX,newY)) {
 
         }
-
-    }
-
-    public void init(){
-        readJson();
-        System.out.println("Json read");
-        createRectangles();
-        System.out.println("Rectangles created");
-        generateFont();
-        System.out.println("Font generated");
     }
 }

@@ -2,20 +2,25 @@ package com.pablo.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pablo.gameutils.BasicGameType;
-import com.pablo.screen.BasicMiniGameScreen;
-import com.pablo.screen.MenuScreen;
+import com.pablo.screen.LevelSelectionScreen;
+
+import java.util.ArrayList;
 
 public class MyGdxGame extends Game {
 	private  SpriteBatch batch;
 
 	private OrthographicCamera camera;
-	private MenuScreen menuScreen;
+	private LevelSelectionScreen levelSelectionScreen;
 
 
+	private ArrayList<BasicGameType> gameTypes;
+
+	public ArrayList<BasicGameType> gameTypes(){
+		return gameTypes;
+	}
 
 
     /**
@@ -30,10 +35,11 @@ public class MyGdxGame extends Game {
 		camera = new OrthographicCamera(com.pablo.gameutils.GameInfo.CAMERA_WIDTH, com.pablo.gameutils.GameInfo.CAMERA_HEIGHT);
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
-		menuScreen = new MenuScreen(this);
+		levelSelectionScreen = new LevelSelectionScreen(this);
 
+		gameTypes = BasicGameType.getGameTypes();
 		Gdx.input.setCatchBackKey(true);
-		setScreen(menuScreen);
+		setScreen(levelSelectionScreen);
 
 
 	}
@@ -60,7 +66,7 @@ public class MyGdxGame extends Game {
 		return this.camera;
 	}
 	public void backToMenu(){
-		this.setScreen(menuScreen);
+		this.setScreen(levelSelectionScreen);
 	}
 
 }

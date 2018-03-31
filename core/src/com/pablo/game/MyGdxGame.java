@@ -6,9 +6,44 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pablo.gameutils.BasicGameType;
 import com.pablo.screen.LevelSelectionScreen;
+import com.pablo.screen.MenuScreen;
 
 import java.util.ArrayList;
 
+/*
+Plant UML comment
+@startuml
+class MyGdxGame
+class MenuScreen
+class BasicGameType
+class ShapeGeneration
+class ShapeIdentification
+
+Tuple --|> Tuple2
+Tuple --|> Tuple3
+Tuple --|> Tuple4
+
+
+MyGdxGame -- MenuScreen: >
+MyGdxGame -- BasicGameType: >
+MenuScreen -- SummaryScreen: >
+MenuScreen -- LevelSelectionScreen: >
+LevelSelectionScreen -- BasicMiniGameScreen: >
+LevelSelectionScreen -- MenuScreenInput: >
+BasicMiniGameScreen -- ResultScreen: >
+BasicMiniGameScreen -- ShapeGeneration: >
+BasicMiniGameScreen -- ShapeIdentification: >
+BasicMiniGameScreen -- UISprite: >
+BasicMiniGameScreen -- BasicInput: >
+MenuScreen -- Utilities: >
+BasicGameType --* Tuple
+@enduml
+ */
+
+/**
+ * @author Dennis Guye
+ *
+ */
 public class MyGdxGame extends Game {
 	private  SpriteBatch batch;
 
@@ -39,7 +74,7 @@ public class MyGdxGame extends Game {
 
 		gameTypes = BasicGameType.getGameTypes();
 		Gdx.input.setCatchBackKey(true);
-		setScreen(levelSelectionScreen);
+		setScreen(new MenuScreen(this));
 
 
 	}

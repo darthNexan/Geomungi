@@ -18,20 +18,26 @@ import static java.lang.Math.scalb;
 public class MenuScreenInput implements GestureDetector.GestureListener {
 
     private LevelSelectionScreen screen;
+    private boolean shouldExecuted;
 
     public MenuScreenInput(LevelSelectionScreen screen){
         this.screen = screen;
+        shouldExecuted =false;
 
     }
 
 
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
+
         return false;
     }
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
+
+
+        Gdx.app.log("Touch Down", "Executed");
 
         float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
         float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
@@ -49,6 +55,7 @@ public class MenuScreenInput implements GestureDetector.GestureListener {
 
             }
         }
+
 
         return false;
     }

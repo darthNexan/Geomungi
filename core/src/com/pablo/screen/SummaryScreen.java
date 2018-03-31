@@ -3,6 +3,8 @@ package com.pablo.screen;
 
 import com.badlogic.gdx.Screen;
 /**
+ * TODO add previous screen variable to allow easy switching between screens
+ * Displays a summary of passed performance
  * Created by Dennis on 29/03/2018.
  */
 

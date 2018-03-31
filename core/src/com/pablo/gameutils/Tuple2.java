@@ -32,4 +32,9 @@ public class Tuple2<X,Y> extends Tuple{
     }
 
 
+    @Override
+    public Class<?>[] getGenericTypes() {
+        Class<?>[] arr = new Class[]{x1.getClass(),x2.getClass()};
+        return arr;
+    }
 }

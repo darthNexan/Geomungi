@@ -24,7 +24,9 @@ import java.util.ArrayList;
 
 import static java.lang.Math.ceil;
 
-/**
+
+/** TODO add previous section variable to allow switching back to the previous screen
+ * Allows a user to select a puzzle
  * Created by Dennis on 28/03/2018.
  */
 
@@ -32,14 +34,14 @@ public class LevelSelectionScreen implements Screen {
 
     private SpriteBatch batch;
     private BitmapFont font;
-    Camera camera;
+    private Camera camera;
     public MyGdxGame game;
 
-    ShapeRenderer shapeRenderer;
+    private ShapeRenderer shapeRenderer;
     public Rectangle[] textBox;
 
-    public ArrayList<String> levelNames;
-    GestureDetector detector;
+    private ArrayList<String> levelNames;
+    private GestureDetector detector;
 
 
     /**
@@ -52,9 +54,10 @@ public class LevelSelectionScreen implements Screen {
         this.camera = game.getCamera();
         this.game = game;
         this.shapeRenderer = new ShapeRenderer();
-        detector =new GestureDetector(new MenuScreenInput(this));
-        Gdx.input.setInputProcessor(detector);
 
+        detector = new GestureDetector(new MenuScreenInput(this));
+
+        //Gdx.input.setInputProcessor(detector);
         init();
     }
 
@@ -99,6 +102,8 @@ public class LevelSelectionScreen implements Screen {
      */
     @Override
     public void show() {
+
+        Gdx.input.setCatchBackKey(false);
         Gdx.input.setInputProcessor(detector);
     }
 

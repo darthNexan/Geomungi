@@ -8,6 +8,25 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.Random;
 import java.util.Vector;
 
+/*
+@startuml
+class ShapeGeneration{
++generate()
++generateParallelPoints()
++generateKitePoints()
++generateParallelogram()
++generateTrapezium()
++generateTriangle()
++generateShape()
+-checkAllVisibility()
+-checkVisibility()
+-addPoints()
+-checkSpacing()
+}
+@enduml
+
+ */
+
 /**
  * Created by Dennis on 18/02/2018.
  * This class is used for generating points used withing the game.

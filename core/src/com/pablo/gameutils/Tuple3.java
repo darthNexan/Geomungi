@@ -44,5 +44,10 @@ public class Tuple3<X,Y,Z> extends Tuple{
 
     }
 
+    @Override
+    public Class<?>[] getGenericTypes() {
+        Class<?>[] arr = new Class[]{x1.getClass(),x2.getClass(),x3.getClass()};
+        return arr;
+    }
 
 }

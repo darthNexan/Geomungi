@@ -10,20 +10,22 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.BasicGameType;
 import com.pablo.gameutils.GameInfo;
+import com.pablo.gameutils.Tuple;
 import com.pablo.gameutils.Tuple2;
 import com.pablo.gameutils.Tuple3;
 import com.pablo.gameutils.Tuple4;
 import com.pablo.gameutils.UISprite;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 
+
 /**
+ * Allows a user to view their performance on this puzzle.
  * Created by Dennis on 08/03/2018.
  */
 
@@ -37,7 +39,7 @@ public class ResultScreen implements Screen {
     private String[] messages;
     private MyGdxGame game;
     private BasicMiniGameScreen prevScreen;
-    private String[] modeSpecificMessages;
+    private String[] criteriaHeadings;
     private String[] modeSpecificFeedback;
     private String header;
     private UISprite nextSprite;
@@ -68,10 +70,11 @@ public class ResultScreen implements Screen {
         this.camera = this.game.getCamera();
         this.prevScreen = prevScreen;
         this.type = type;
+
         generateBitmapFont();
         initSprites();
         shapeRenderer = new ShapeRenderer();
-        readModeSpecificMessages();
+        getStringsToDisplay();
 
     }
 
@@ -126,6 +129,47 @@ public class ResultScreen implements Screen {
 
     }
 
+
+
+    /**
+     * The constructor for a game with a tuple 4 result
+     * @param type
+     * @param game
+     * @param prevScreen
+     */
+    public ResultScreen(BasicGameType type, MyGdxGame game, BasicMiniGameScreen prevScreen) {
+
+
+        this(game, prevScreen,type);
+        Tuple tuple = type.getResults().get(type.getResults().size() -1);
+        if (!checkClass(tuple)){
+            throw new IllegalArgumentException();
+        }
+
+        if (tuple instanceof Tuple2<?,?>){
+            tuple2 = (Tuple2<Boolean,Boolean>)tuple;
+        }
+        else if (tuple instanceof Tuple3<?,?,?>){
+            tuple3 = (Tuple3<Boolean,Boolean,Boolean>) tuple;
+        }
+        else if (tuple instanceof Tuple4<?,?,?,?>){
+            tuple4 = (Tuple4<Boolean,Boolean,Boolean,Boolean>) tuple;
+        }
+        calc();
+
+
+
+    }
+
+
+    boolean checkClass(Tuple tuple){
+
+        for (Class<?> className : tuple.getGenericTypes())
+            if (!className.equals(Boolean.class))
+                return false;
+
+        return true;
+    }
     /**
      * Initializes the sprites and lays them out on the screen
      */
@@ -438,8 +482,8 @@ public class ResultScreen implements Screen {
         int i;
         float deltaY = GameInfo.CAMERA_HEIGHT/10;
         for (i =0;i<messages.length;i++){
-            if (i < modeSpecificFeedback.length)
-                fontReg.draw(batch,modeSpecificFeedback[i],initialX,initialY-(deltaY*(i+1)));
+            if (i < criteriaHeadings.length)
+                fontReg.draw(batch,criteriaHeadings[i],initialX,initialY-(deltaY*(i+1)));
 
             fontReg.draw(batch,messages[i],initialX+deltaX,initialY-(deltaY*(i+1)));
         }
@@ -473,34 +517,14 @@ public class ResultScreen implements Screen {
         fontReg.draw(batch,"Hint: "+outputMessage,x,y);
     }
 
-    private void readModeSpecificMessages(){
-        JsonReader reader = new JsonReader();
 
-        JsonValue value = reader.parse(Gdx.files.internal("BasicFeedback.json"));
-
-        JsonValue.JsonIterator iterator = value.iterator();
-        JsonValue currentValue =null;
-
-        while (iterator.hasNext()){
-            currentValue = iterator.next();
-            if (currentValue.getInt("category") == type.category && currentValue.getInt("shapeType") == type.shapeType &&
-                    currentValue.getInt("angleType") == type.angleType && currentValue.getInt("specializedCategory") == type.specializedCategory){
-                break;
-            }
-
-        }
-
-
-        if (currentValue != null ){
-            modeSpecificMessages = currentValue.get("FeedBack").asStringArray();
-            modeSpecificFeedback = currentValue.get("Labels").asStringArray();
-            header = currentValue.getString("Header");
-        }
-        else {
-            modeSpecificFeedback=new String[]{""};
-            modeSpecificMessages=new String[]{""};
-            header="";
-        }
+    /**
+     * Retrieves the text to be displayed frm the basic game types container class
+     */
+    private void getStringsToDisplay(){
+        modeSpecificFeedback = type.getFeedBackMessage();
+        criteriaHeadings = type.getCriteriaHeadings();
+        header = type.header;
 
     }
 }

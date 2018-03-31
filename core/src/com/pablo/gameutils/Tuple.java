@@ -5,4 +5,6 @@ package com.pablo.gameutils;
  */
 
 public abstract class Tuple {
+
+    public abstract Class<?>[] getGenericTypes();
 }

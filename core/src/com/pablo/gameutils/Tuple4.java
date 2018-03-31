@@ -50,4 +50,10 @@ public class Tuple4 <W,X,Y,Z> extends Tuple{
         return "(" + x1 + ", " + x2 + ", " +x3 +", "+x4+")";
     }
 
+
+    @Override
+    public Class<?>[] getGenericTypes() {
+        Class<?>[] arr = new Class[]{x1.getClass(),x2.getClass(),x3.getClass(),x4.getClass()};
+        return arr;
+    }
 }

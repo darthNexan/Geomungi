@@ -33,6 +33,7 @@ import java.util.Vector;
 import static java.lang.Math.ceil;
 
 /**
+ * A puzzle
  * Created by Dennis on 04/02/2018.
  */
 
@@ -174,6 +175,9 @@ public class BasicMiniGameScreen implements Screen {
     @Override
     public void show() {
         clear();
+        Gdx.input.setInputProcessor(new BasicsInput(currentPoint, this));
+
+        Gdx.input.setCatchBackKey(true);
     }
 
 
@@ -505,18 +509,21 @@ public class BasicMiniGameScreen implements Screen {
     }
 
     private void goToResultScreen(Tuple2<Boolean,Boolean> res){
-        ResultScreen resScreen = new ResultScreen(gameStages.get(stageNo),res, game,this);
+        basicGameType.addToResults(res);
+        ResultScreen resScreen = new ResultScreen(gameStages.get(stageNo), game,this);
         game.setScreen(resScreen);
 
     }
 
     private void goToResultScreen(Tuple3<Boolean,Boolean,Boolean> res){
-        ResultScreen resScreen = new ResultScreen(gameStages.get(stageNo),res, game,this);
+        basicGameType.addToResults(res);
+        ResultScreen resScreen = new ResultScreen(gameStages.get(stageNo), game,this);
         game.setScreen(resScreen);
     }
 
     private void goToResultScreen(Tuple4<Boolean,Boolean,Boolean,Boolean> res){
-        ResultScreen resScreen = new ResultScreen(gameStages.get(stageNo),res, game,this);
+        basicGameType.addToResults(res);
+        ResultScreen resScreen = new ResultScreen(gameStages.get(stageNo),game,this);
         game.setScreen(resScreen);
     }
 

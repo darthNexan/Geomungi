@@ -12,15 +12,22 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.GameInfo;
 import com.pablo.gameutils.Utilities;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.floor;
 
+
+/*
+@startuml
+
+@enduml
+ */
 
 /**
+ * Allows a user to select either to view their past performance or start a new puzzle
  * Created by Dennis on 29/03/2018.
  */
 
@@ -41,8 +48,8 @@ public class MenuScreen implements Screen {
         this.game = game;
         batch = game.getBatch();
         camera = game.getCamera();
-        font = Utilities.generateFont(12, Color.BLACK, Color.WHITE, 2f);
-
+        font = Utilities.generateFont(6, Color.BLACK, Color.WHITE, 2f);
+        shapeRenderer = new ShapeRenderer();
         options = new String[]{"Basics", "View Progress"};
 
         float rectangleHeight = 30f;
@@ -55,7 +62,7 @@ public class MenuScreen implements Screen {
                 new Rectangle(x - rectangleWidth/2, y - (rectangleHeight + 10f), rectangleWidth, rectangleHeight),
         };
 
-        Gdx.input.setInputProcessor(null);
+
 
     }
     /**
@@ -110,10 +117,7 @@ public class MenuScreen implements Screen {
 
         batch.end();
 
-
-
-
-
+        checkInput();
 
     }
 
@@ -163,14 +167,33 @@ public class MenuScreen implements Screen {
     public void checkInput(){
         float x =  Gdx.input.getX();
         float y = Gdx.input.getY();
+
         float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
         float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
+        boolean shouldDispose = false;
 
         if (textBoxes[0].contains(newX,newY)) {
-            game.setScreen(new LevelSelectionScreen(this.game));
+            Timer.schedule(new Timer.Task() {
+                @Override
+
+                public void run() {
+                    LevelSelectionScreen levelSelectionScreen = new LevelSelectionScreen(game);
+                    game.setScreen(levelSelectionScreen);
+                    levelSelectionScreen.show();
+                }
+            }, 0.2f);
+            shouldDispose = true;
         }
         else if (textBoxes[1].contains(newX,newY)) {
-
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    game.setScreen(new SummaryScreen());
+                }
+            }, 0.2f);
+            shouldDispose = true;
         }
+
+        if (shouldDispose) this.dispose();
     }
 }

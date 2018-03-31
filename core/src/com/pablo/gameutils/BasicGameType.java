@@ -27,6 +27,17 @@ public class BasicGameType {
     //also for types of quadrilaterals parallelogram, rhombus, square, trapezoid, kite, rectangle
     public String header;
     public ArrayList<Tuple> userResults;// A tuple that contains the results a user got on any given level
+
+    public String[] getFeedBackMessage() {
+        return feedBackMessage;
+    }
+
+    public String[] getCriteriaHeadings() {
+        return criteriaHeadings;
+    }
+
+    private String[] feedBackMessage;
+    private String[] criteriaHeadings;
     /**
      * Returns a fully constructed game mode
      */
@@ -60,6 +71,7 @@ public class BasicGameType {
     }//BasicGameType Constructor
 
     public BasicGameType(int gameCategory, int shapeType, int angleType, int specializedCategory) {
+        this.userResults = new ArrayList<Tuple>();
         this.category = gameCategory;
         this.shapeType = shapeType;
         this.angleType = angleType;
@@ -203,6 +215,8 @@ public class BasicGameType {
             JsonValue value = iterator.next();
             BasicGameType temp = new BasicGameType(value.getInt("category"), value.getInt("shapeType"), value.getInt("angleType"),value.getInt("specializedCategory"));
             temp.header = value.getString("Header");
+            temp.criteriaHeadings = value.get("Labels").asStringArray();
+            temp.feedBackMessage = value.get("FeedBack").asStringArray();
             list.add(temp);
         }
 

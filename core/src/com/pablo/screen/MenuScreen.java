@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.GameInfo;
+import com.pablo.gameutils.Transition;
 import com.pablo.gameutils.Utilities;
 
 import static java.lang.Math.abs;
@@ -40,8 +41,9 @@ public class MenuScreen implements Screen {
     public MenuScreen(MyGdxGame game){
         this.game = game;
         batch = game.getBatch();
+        shapeRenderer = new ShapeRenderer();
         camera = game.getCamera();
-        font = Utilities.generateFont(12, Color.BLACK, Color.WHITE, 2f);
+        font = Utilities.generateFont(6, Color.BLACK, Color.WHITE, 2f);
 
         options = new String[]{"Basics", "View Progress"};
 
@@ -111,7 +113,7 @@ public class MenuScreen implements Screen {
         batch.end();
 
 
-
+        checkInput();
 
 
 
@@ -160,6 +162,9 @@ public class MenuScreen implements Screen {
     }
 
 
+    /**
+     * Called in the render loop and checks if the user interacts with the screen
+     */
     public void checkInput(){
         float x =  Gdx.input.getX();
         float y = Gdx.input.getY();
@@ -167,7 +172,7 @@ public class MenuScreen implements Screen {
         float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
 
         if (textBoxes[0].contains(newX,newY)) {
-            game.setScreen(new LevelSelectionScreen(this.game));
+            Transition.changeToLevelSelectionScreen(game,true);
         }
         else if (textBoxes[1].contains(newX,newY)) {
 

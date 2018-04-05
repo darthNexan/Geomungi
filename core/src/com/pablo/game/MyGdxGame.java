@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pablo.gameutils.BasicGameType;
+import com.pablo.gameutils.Transition;
 import com.pablo.screen.LevelSelectionScreen;
 
 import java.util.ArrayList;
@@ -35,11 +36,11 @@ public class MyGdxGame extends Game {
 		camera = new OrthographicCamera(com.pablo.gameutils.GameInfo.CAMERA_WIDTH, com.pablo.gameutils.GameInfo.CAMERA_HEIGHT);
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
-		levelSelectionScreen = new LevelSelectionScreen(this);
+
 
 		gameTypes = BasicGameType.getGameTypes();
-		Gdx.input.setCatchBackKey(true);
-		setScreen(levelSelectionScreen);
+
+		Transition.changeToMenuScreen(this,false);
 
 
 	}

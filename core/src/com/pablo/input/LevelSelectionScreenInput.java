@@ -5,6 +5,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.pablo.gameutils.GameInfo;
+import com.pablo.gameutils.Transition;
 import com.pablo.screen.BasicMiniGameScreen;
 import com.pablo.screen.LevelSelectionScreen;
 
@@ -15,11 +16,11 @@ import static java.lang.Math.scalb;
  * Created by Dennis on 28/03/2018.
  */
 
-public class MenuScreenInput implements GestureDetector.GestureListener {
+public class LevelSelectionScreenInput implements GestureDetector.GestureListener {
 
     private LevelSelectionScreen screen;
 
-    public MenuScreenInput(LevelSelectionScreen screen){
+    public LevelSelectionScreenInput(LevelSelectionScreen screen){
         this.screen = screen;
 
     }
@@ -42,11 +43,7 @@ public class MenuScreenInput implements GestureDetector.GestureListener {
         for (int i = 0; i < boxes.length; i++ ){
             if (boxes[i].contains(newX,newY)){
 
-                BasicMiniGameScreen screen = new BasicMiniGameScreen(this.screen.game);
-                screen.setStage(i);
-                Gdx.app.log("Stage", "" + screen.getStage());
-                this.screen.game.setScreen(screen);
-
+                Transition.changeToBasicMiniGameScreen(this.screen.game,i);
             }
         }
 

@@ -1,6 +1,7 @@
 package com.pablo.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -17,8 +18,9 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.GameInfo;
+import com.pablo.gameutils.Transition;
 import com.pablo.gameutils.Tuple2;
-import com.pablo.input.MenuScreenInput;
+import com.pablo.input.LevelSelectionScreenInput;
 
 import java.util.ArrayList;
 
@@ -52,8 +54,7 @@ public class LevelSelectionScreen implements Screen {
         this.camera = game.getCamera();
         this.game = game;
         this.shapeRenderer = new ShapeRenderer();
-        detector =new GestureDetector(new MenuScreenInput(this));
-        Gdx.input.setInputProcessor(detector);
+        detector =new GestureDetector(new LevelSelectionScreenInput(this));
 
         init();
     }
@@ -100,6 +101,8 @@ public class LevelSelectionScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(detector);
+        Gdx.input.setCatchBackKey(true);
+
     }
 
     /**
@@ -145,6 +148,7 @@ public class LevelSelectionScreen implements Screen {
         }
 
         batch.end();
+        checkBackButton();
     }
 
     @Override
@@ -169,7 +173,7 @@ public class LevelSelectionScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        shapeRenderer.dispose();
     }
 
 
@@ -222,5 +226,12 @@ public class LevelSelectionScreen implements Screen {
         System.out.println("Rectangles created");
         generateFont();
         System.out.println("Font generated");
+    }
+
+    private void checkBackButton(){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+            Transition.changeToMenuScreen(game,true);
+            dispose();
+        }
     }
 }

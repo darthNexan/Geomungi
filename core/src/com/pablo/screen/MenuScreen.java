@@ -65,6 +65,7 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(false);
 
     }
 
@@ -165,7 +166,7 @@ public class MenuScreen implements Screen {
     /**
      * Called in the render loop and checks if the user interacts with the screen
      */
-    public void checkInput(){
+    private  void checkInput(){
         float x =  Gdx.input.getX();
         float y = Gdx.input.getY();
         float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
@@ -173,6 +174,7 @@ public class MenuScreen implements Screen {
 
         if (textBoxes[0].contains(newX,newY)) {
             Transition.changeToLevelSelectionScreen(game,true);
+            dispose();
         }
         else if (textBoxes[1].contains(newX,newY)) {
 

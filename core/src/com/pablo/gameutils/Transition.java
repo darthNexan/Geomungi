@@ -15,38 +15,78 @@ import com.pablo.screen.ResultScreen;
 
 public class Transition {
 
+    private static volatile boolean isDelayed;//used to block access to methods if an appreciatable amount of time has not elapsed
+    static {
+        isDelayed=false;
 
-    private static void delay(){
-        final double TIME_TO_DELAY = 1d;
-        double start = System.currentTimeMillis();
-        double now = System.currentTimeMillis();
-        while (now - start < TIME_TO_DELAY){
-            now = System.currentTimeMillis();
+    }
+
+
+    /**
+     * Used to delay until the next screen transition.
+     * This is not the ideal solution.
+     */
+    private static class TimingRunnable implements Runnable{
+
+        private double startTime;
+        private float delay;
+
+        /**
+         * Delay is in seconds
+         * @param delay
+         */
+        TimingRunnable(float delay){
+            this.startTime = System.currentTimeMillis();
+            this.delay = delay;
+        }
+        @Override
+        public void run() {
+            double currentT = System.currentTimeMillis();
+
+            while ((currentT - startTime)/1000 < delay){
+                currentT = System.currentTimeMillis();
+            }
+
+            Transition.isDelayed = false;
         }
     }
 
-    public static void changeToMenuScreen(MyGdxGame game, boolean shouldDelay){
-        MenuScreen screen = new MenuScreen(game);
-        if (shouldDelay)
-            delay();
-        game.setScreen(screen);
+    /**
+     * Spawns a thread that measures the time until the next transition
+     *
+     */
+    private static void delay(){
+        isDelayed=true;
+        Runnable runnable = new TimingRunnable(1f);
+        Thread th = new Thread(runnable);
+        th.setPriority(Thread.MIN_PRIORITY);
+        th.start();
+    }
 
+    public static void changeToMenuScreen(MyGdxGame game, boolean shouldDelay){
+        if (!isDelayed) {
+            MenuScreen screen = new MenuScreen(game);
+            game.setScreen(screen);
+            if (shouldDelay) delay();
+        }
     }
 
 
     public static void changeToLevelSelectionScreen(MyGdxGame game, boolean shouldDelay){
-        LevelSelectionScreen screen = new LevelSelectionScreen(game);
-        if (shouldDelay) delay();
-
-
-        game.setScreen(screen);
+        if (!isDelayed) {
+            LevelSelectionScreen screen = new LevelSelectionScreen(game);
+            game.setScreen(screen);
+            if (shouldDelay) delay();
+        }
     }
 
     public static void changeToBasicMiniGameScreen(MyGdxGame game, int selectedStage){
-        BasicMiniGameScreen screen = new BasicMiniGameScreen(game);
-        screen.setStage(selectedStage);
+        if (!isDelayed) {
+            BasicMiniGameScreen screen = new BasicMiniGameScreen(game);
+            screen.setStage(selectedStage);
 
-        game.setScreen(screen);
+            game.setScreen(screen);
+        }
     }
 
 

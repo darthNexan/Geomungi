@@ -16,13 +16,13 @@ import static java.lang.Math.abs;
  * Created by Dennis on 07/02/2018.
  */
 
-public class BasicsInput extends InputAdapter {
+public class PuzzleScreenInput extends InputAdapter {
 
 
     private Vector2 pos;
     private UISprite uiSprite;
     private UISprite uiSprite2;
-    public BasicsInput(Vector2 pos, BasicMiniGameScreen screen){
+    public PuzzleScreenInput(Vector2 pos, BasicMiniGameScreen screen){
         this.uiSprite =  screen.XButton;
         this.uiSprite2 = screen.checkButton;
         this.pos = pos;

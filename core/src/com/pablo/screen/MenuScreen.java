@@ -18,7 +18,6 @@ import com.pablo.gameutils.Transition;
 import com.pablo.gameutils.Utilities;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.floor;
 
 
 /**
@@ -173,7 +172,7 @@ public class MenuScreen implements Screen {
         float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
 
         if (textBoxes[0].contains(newX,newY)) {
-            Transition.changeToLevelSelectionScreen(game,true);
+            Transition.changeToPuzzleSelectionScreen(game,true);
             dispose();
         }
         else if (textBoxes[1].contains(newX,newY)) {

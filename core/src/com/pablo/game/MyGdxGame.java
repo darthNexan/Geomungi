@@ -1,7 +1,6 @@
 package com.pablo.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pablo.gameutils.BasicGameType;
@@ -14,7 +13,6 @@ public class MyGdxGame extends Game {
 	private  SpriteBatch batch;
 
 	private OrthographicCamera camera;
-	private LevelSelectionScreen levelSelectionScreen;
 
 
 	private ArrayList<BasicGameType> gameTypes;
@@ -40,7 +38,7 @@ public class MyGdxGame extends Game {
 
 		gameTypes = BasicGameType.getGameTypes();
 
-		Transition.changeToMenuScreen(this,false);
+		Transition.changeToMenuScreen(this,false);// changes the screen to the menu
 
 
 	}
@@ -62,12 +60,10 @@ public class MyGdxGame extends Game {
 
 	public SpriteBatch getBatch(){
 		return this.batch;
-	}
+	}//returns the sprite batch to be used by all screens
 	public OrthographicCamera getCamera(){
 		return this.camera;
-	}
-	public void backToMenu(){
-		this.setScreen(levelSelectionScreen);
-	}
+	}//returns the camera to be used by all screens
+
 
 }

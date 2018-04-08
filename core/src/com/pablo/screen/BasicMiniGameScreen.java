@@ -23,6 +23,7 @@ import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.BasicGameType;
 import com.pablo.gameutils.ShapeGeneration;
 import com.pablo.gameutils.ShapeIdentification;
+import com.pablo.gameutils.Transition;
 import com.pablo.gameutils.Tuple2;
 import com.pablo.gameutils.Tuple3;
 import com.pablo.gameutils.Tuple4;
@@ -390,10 +391,7 @@ public class BasicMiniGameScreen implements Screen {
             testSolution();
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
-            game.backToMenu();
-            dispose();
-        }
+        checkBackButton();
 
     }//shapeRenderer
 
@@ -526,6 +524,13 @@ public class BasicMiniGameScreen implements Screen {
         Vector2 pos = new Vector2(2*GameInfo.CAMERA_WIDTH/10 + 10f,  GameInfo.CAMERA_HEIGHT -5f);
         font.draw(batch,layout, pos.x,pos.y);
 
+    }
+
+
+    private void checkBackButton(){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+            Transition.changeToLevelSelectionScreen(game,true);
+        }
     }
 
 }//BasicsMiniGameScreen

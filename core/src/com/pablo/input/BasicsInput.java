@@ -1,10 +1,12 @@
 package com.pablo.input;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.pablo.gameutils.GameInfo;
+import com.pablo.gameutils.Transition;
 import com.pablo.gameutils.UISprite;
 import com.pablo.screen.BasicMiniGameScreen;
 
@@ -15,6 +17,7 @@ import static java.lang.Math.abs;
  */
 
 public class BasicsInput extends InputAdapter {
+
 
     private Vector2 pos;
     private UISprite uiSprite;
@@ -62,4 +65,6 @@ public class BasicsInput extends InputAdapter {
         pos.y = -1;
         return false;
     }
+
 }
+

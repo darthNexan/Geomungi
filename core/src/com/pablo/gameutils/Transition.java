@@ -32,8 +32,8 @@ public class Transition {
         private float delay;
 
         /**
-         * Delay is in seconds
-         * @param delay
+         * Runnable constructor
+         * @param delay in seconds
          */
         TimingRunnable(float delay){
             this.startTime = System.currentTimeMillis();
@@ -57,7 +57,7 @@ public class Transition {
      */
     private static void delay(){
         isDelayed=true;
-        Runnable runnable = new TimingRunnable(1f);
+        Runnable runnable = new TimingRunnable(0.5f);
         Thread th = new Thread(runnable);
         th.setPriority(Thread.MIN_PRIORITY);
         th.start();

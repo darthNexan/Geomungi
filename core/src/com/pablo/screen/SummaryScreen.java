@@ -2,11 +2,31 @@ package com.pablo.screen;
 
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.pablo.game.MyGdxGame;
+import com.pablo.gameutils.BasicGameType;
+import java.util.ArrayList;
 /**
  * Created by Dennis on 29/03/2018.
  */
 
 public class SummaryScreen implements Screen {
+    private MyGdxGame game;
+    private Camera camera;
+    private SpriteBatch batch;
+    private ShapeRenderer renderer;
+    private ArrayList<BasicGameType> types;
+
+    public SummaryScreen(MyGdxGame game){
+        this.game = game;
+        this.camera = game.getCamera();
+        this.batch = game.getBatch();
+        this.renderer = new ShapeRenderer();
+        this.types = game.gameTypes();
+
+    }
     /**
      * Called when this screen becomes the current screen for a {@link Game}.
      */

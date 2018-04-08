@@ -89,8 +89,8 @@ public class LevelSelectionScreen implements Screen {
      *          the second value is the scale that should be applied to the font so that it can be displayed correctly
      */
     private Tuple2<Integer,Float> scaleHelper(final int size){
-        Integer sizeRes = (int)ceil(size * (Gdx.graphics.getHeight() / GameInfo.CAMERA_HEIGHT));
-        Float scaleRes =GameInfo.CAMERA_HEIGHT/Gdx.graphics.getHeight();
+        Integer sizeRes = (int)ceil(size * (Gdx.graphics.getHeight() / GameInfo.CAMERA_HEIGHT));//the size the font must be to avoid pixelation
+        Float scaleRes =GameInfo.CAMERA_HEIGHT/Gdx.graphics.getHeight();//the factor by which the font needs to be scaled down to
         return new Tuple2<Integer,Float>(sizeRes, scaleRes);
     }
 

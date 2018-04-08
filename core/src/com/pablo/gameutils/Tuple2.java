@@ -31,5 +31,12 @@ public class Tuple2<X,Y> extends Tuple{
         }
     }
 
+    @Override
+    public List<Class> getTypes() {
+        ArrayList<Class> list = new ArrayList<Class>();
+        list.add(x1.getClass());
+        list.add(x2.getClass());
 
+        return list;
+    }
 }

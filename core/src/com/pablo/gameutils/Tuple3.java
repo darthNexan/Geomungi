@@ -44,5 +44,12 @@ public class Tuple3<X,Y,Z> extends Tuple{
 
     }
 
-
+    @Override
+    public List<Class> getTypes() {
+        ArrayList<Class> list = new ArrayList<Class>();
+        list.add(x1.getClass());
+        list.add(x2.getClass());
+        list.add(x3.getClass());
+        return list;
+    }
 }

@@ -1,37 +1,52 @@
 package com.pablo.screen;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.input.GestureDetector;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.BasicGameType;
-import java.util.ArrayList;
+import com.pablo.input.SummaryScreenInput;
+
+
+
 /**
  * Created by Dennis on 29/03/2018.
  */
 
 public class SummaryScreen implements Screen {
-    private MyGdxGame game;
+
+    private int resultToBeDisplayed;
+    private GestureDetector detector;
     private Camera camera;
     private SpriteBatch batch;
-    private ShapeRenderer renderer;
-    private ArrayList<BasicGameType> types;
+    private MyGdxGame game;
+    private BasicGameType type;
 
-    public SummaryScreen(MyGdxGame game){
+
+    public SummaryScreen(MyGdxGame game, BasicGameType type ){
+
+        detector = new GestureDetector(new SummaryScreenInput(this));
+        resultToBeDisplayed = 0;
         this.game = game;
-        this.camera = game.getCamera();
         this.batch = game.getBatch();
-        this.renderer = new ShapeRenderer();
-        this.types = game.gameTypes();
+        this.camera = game.getCamera();
+        this.type = type;
+
+
 
     }
+
+
+
     /**
-     * Called when this screen becomes the current screen for a {@link Game}.
+     * Called when this screen becomes the current screen for a game.
      */
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(detector);
 
     }
 
@@ -48,7 +63,6 @@ public class SummaryScreen implements Screen {
     /**
      * @param width
      * @param height
-     * @see ApplicationListener#resize(int, int)
      */
     @Override
     public void resize(int width, int height) {
@@ -56,7 +70,6 @@ public class SummaryScreen implements Screen {
     }
 
     /**
-     * @see ApplicationListener#pause()
      */
     @Override
     public void pause() {
@@ -64,7 +77,7 @@ public class SummaryScreen implements Screen {
     }
 
     /**
-     * @see ApplicationListener#resume()
+     *
      */
     @Override
     public void resume() {
@@ -72,7 +85,7 @@ public class SummaryScreen implements Screen {
     }
 
     /**
-     * Called when this screen is no longer the current screen for a {@link Game}.
+     *
      */
     @Override
     public void hide() {
@@ -85,5 +98,14 @@ public class SummaryScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public void changeResultToDisplay(int value){
+        if (resultToBeDisplayed>1 && value <0){
+            resultToBeDisplayed += value;
+        }
+        else if (resultToBeDisplayed<type.userResults.size()-1 && value>0){
+            resultToBeDisplayed += value;
+        }
     }
 }

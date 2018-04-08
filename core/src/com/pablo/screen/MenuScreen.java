@@ -176,6 +176,8 @@ public class MenuScreen implements Screen {
             dispose();
         }
         else if (textBoxes[1].contains(newX,newY)) {
+            Transition.changeToSummarySelectionScreen(game,true);
+            dispose();
 
         }
     }

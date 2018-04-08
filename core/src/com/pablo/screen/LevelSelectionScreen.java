@@ -18,9 +18,11 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.GameInfo;
+import com.pablo.gameutils.SelectedScreen;
 import com.pablo.gameutils.Transition;
 import com.pablo.gameutils.Tuple2;
 import com.pablo.input.LevelSelectionScreenInput;
+import com.pablo.input.SelectSummaryScreenInput;
 
 import java.util.ArrayList;
 
@@ -34,14 +36,15 @@ public class LevelSelectionScreen implements Screen {
 
     private SpriteBatch batch;
     private BitmapFont font;
-    Camera camera;
+    private Camera camera;
     public MyGdxGame game;
 
-    ShapeRenderer shapeRenderer;
+    private ShapeRenderer shapeRenderer;
     public Rectangle[] textBox;
 
-    public ArrayList<String> levelNames;
-    GestureDetector detector;
+    private ArrayList<String> levelNames;
+    private GestureDetector detector;
+
 
 
     /**
@@ -49,12 +52,25 @@ public class LevelSelectionScreen implements Screen {
      * @param game
      */
 
-    public LevelSelectionScreen(MyGdxGame game){
+    public LevelSelectionScreen(MyGdxGame game, SelectedScreen selectedScreen){
         this.batch = game.getBatch();
         this.camera = game.getCamera();
         this.game = game;
         this.shapeRenderer = new ShapeRenderer();
-        detector =new GestureDetector(new LevelSelectionScreenInput(this));
+        switch (selectedScreen){// sets the input handler based on the screen type
+            case Summary:
+                detector= new GestureDetector(new SelectSummaryScreenInput(this));
+                break;
+            case Puzzle:
+                detector =new GestureDetector(new LevelSelectionScreenInput(this));
+
+                break;
+
+            default:
+                Gdx.app.error("Level selection screen","Reached illegal state");
+                throw new Error("Reached an illegal state");
+
+        }
 
         init();
     }
@@ -181,7 +197,7 @@ public class LevelSelectionScreen implements Screen {
      * Get menu titles
      */
 
-    public void readJson(){
+    private void readJson(){
 
         levelNames = new ArrayList<String>();
         JsonReader reader = new JsonReader();
@@ -195,7 +211,10 @@ public class LevelSelectionScreen implements Screen {
 
     }
 
-    public void createRectangles(){
+    /**
+     * creates the rectangles
+     */
+    private void createRectangles(){
         if (levelNames != null) {
             textBox = new Rectangle[levelNames.size()];
             int i = 0;
@@ -219,7 +238,10 @@ public class LevelSelectionScreen implements Screen {
 
     }
 
-    public void init(){
+    /**
+     * Runs all necessary functions
+     */
+    private void init(){
         readJson();
         System.out.println("Json read");
         createRectangles();
@@ -228,6 +250,9 @@ public class LevelSelectionScreen implements Screen {
         System.out.println("Font generated");
     }
 
+    /**
+     * determines whether the previous screen should be displayed
+     */
     private void checkBackButton(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
             Transition.changeToMenuScreen(game,true);

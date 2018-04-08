@@ -28,7 +28,7 @@ import com.pablo.gameutils.Tuple2;
 import com.pablo.gameutils.Tuple3;
 import com.pablo.gameutils.Tuple4;
 import com.pablo.gameutils.UISprite;
-import com.pablo.input.BasicsInput;
+import com.pablo.input.PuzzleScreenInput;
 import java.util.ArrayList;
 import java.util.Vector;
 import static java.lang.Math.ceil;
@@ -106,7 +106,7 @@ public class BasicMiniGameScreen implements Screen {
         selectedPoints = new Vector<Vector<Vector2>>();
         selectedPoints.add(new Vector<Vector2>());
         currentPoint = new Vector2(-1,-1);
-        Gdx.input.setInputProcessor(new BasicsInput(currentPoint, this));
+        Gdx.input.setInputProcessor(new PuzzleScreenInput(currentPoint, this));
         gameStages = this.game.gameTypes();
 
         init();
@@ -529,7 +529,7 @@ public class BasicMiniGameScreen implements Screen {
 
     private void checkBackButton(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
-            Transition.changeToLevelSelectionScreen(game,true);
+            Transition.changeToPuzzleSelectionScreen(game,true);
         }
     }
 

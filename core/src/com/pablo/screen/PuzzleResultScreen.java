@@ -28,18 +28,20 @@ import static java.lang.Math.ceil;
  */
 
 @SuppressWarnings("JavaDoc")
-public class ResultScreen implements Screen {
+public class PuzzleResultScreen implements Screen {
     private BasicGameType type;
     private Tuple2<Boolean,Boolean> tuple2;
     private Tuple3<Boolean,Boolean,Boolean> tuple3;
     private Tuple4<Boolean,Boolean,Boolean,Boolean> tuple4;
     private int score;
-    private String[] messages;
     private MyGdxGame game;
     private BasicMiniGameScreen prevScreen;
     private String[] modeSpecificMessages;
     private String[] modeSpecificFeedback;
     private String header;
+    private String[] messages;
+
+
     private UISprite nextSprite;
     private UISprite retrySprite;
     private UISprite feedbackSprite;
@@ -60,7 +62,7 @@ public class ResultScreen implements Screen {
      * @param prevScreen the screen that launched this class
      * @param type The type of result to show
      */
-    private ResultScreen(MyGdxGame game, BasicMiniGameScreen prevScreen, BasicGameType type){
+    private PuzzleResultScreen(MyGdxGame game, BasicMiniGameScreen prevScreen, BasicGameType type){
         this.game = game;
         this.game.setScreen(this);
         this.score = 0;
@@ -82,7 +84,7 @@ public class ResultScreen implements Screen {
      * @param game
      * @param prevScreen
      */
-    public ResultScreen(BasicGameType type, Tuple3<Boolean, Boolean, Boolean> tuple3, MyGdxGame game, BasicMiniGameScreen prevScreen) {
+    public PuzzleResultScreen(BasicGameType type, Tuple3<Boolean, Boolean, Boolean> tuple3, MyGdxGame game, BasicMiniGameScreen prevScreen) {
         this(game, prevScreen,type);
 
         this.tuple3 = tuple3;
@@ -98,7 +100,7 @@ public class ResultScreen implements Screen {
      * @param game
      * @param prevScreen
      */
-    public ResultScreen(BasicGameType type, Tuple2<Boolean, Boolean> tuple2, MyGdxGame game, BasicMiniGameScreen prevScreen){
+    public PuzzleResultScreen(BasicGameType type, Tuple2<Boolean, Boolean> tuple2, MyGdxGame game, BasicMiniGameScreen prevScreen){
         this(game, prevScreen,type);
 
         this.tuple2 = tuple2;
@@ -117,7 +119,7 @@ public class ResultScreen implements Screen {
      * @param game
      * @param prevScreen
      */
-    public ResultScreen(BasicGameType type, Tuple4<Boolean, Boolean, Boolean, Boolean> tuple4, MyGdxGame game, BasicMiniGameScreen prevScreen) {
+    public PuzzleResultScreen(BasicGameType type, Tuple4<Boolean, Boolean, Boolean, Boolean> tuple4, MyGdxGame game, BasicMiniGameScreen prevScreen) {
         this(game, prevScreen,type);
         this.tuple4 = tuple4;
         calc();
@@ -438,8 +440,8 @@ public class ResultScreen implements Screen {
         int i;
         float deltaY = GameInfo.CAMERA_HEIGHT/10;
         for (i =0;i<messages.length;i++){
-            if (i < modeSpecificFeedback.length)
-                fontReg.draw(batch,modeSpecificFeedback[i],initialX,initialY-(deltaY*(i+1)));
+            if (i < modeSpecificMessages.length)
+                fontReg.draw(batch,modeSpecificMessages[i],initialX,initialY-(deltaY*(i+1)));
 
             fontReg.draw(batch,messages[i],initialX+deltaX,initialY-(deltaY*(i+1)));
         }
@@ -492,8 +494,8 @@ public class ResultScreen implements Screen {
 
 
         if (currentValue != null ){
-            modeSpecificMessages = currentValue.get("FeedBack").asStringArray();
-            modeSpecificFeedback = currentValue.get("Labels").asStringArray();
+            modeSpecificFeedback = currentValue.get("FeedBack").asStringArray();
+            modeSpecificMessages = currentValue.get("Labels").asStringArray();
             header = currentValue.getString("Header");
         }
         else {

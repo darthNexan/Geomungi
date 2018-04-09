@@ -4,7 +4,7 @@ import com.pablo.game.MyGdxGame;
 import com.pablo.screen.BasicMiniGameScreen;
 import com.pablo.screen.LevelSelectionScreen;
 import com.pablo.screen.MenuScreen;
-import com.pablo.screen.ResultScreen;
+import com.pablo.screen.PuzzleResultScreen;
 import com.pablo.screen.SummaryScreen;
 
 
@@ -151,7 +151,7 @@ public class Transition {
      */
     public static void changeToResultScreen(BasicGameType type, MyGdxGame game, Tuple2<Boolean,Boolean> tuple2, BasicMiniGameScreen previousScreen){
         if (!isDelayed) {
-            ResultScreen screen = new ResultScreen(type,tuple2,game,previousScreen);
+            PuzzleResultScreen screen = new PuzzleResultScreen(type,tuple2,game,previousScreen);
             game.setScreen(screen);
         }
     }
@@ -159,7 +159,7 @@ public class Transition {
 
     public static void changeToResultScreen(BasicGameType type, MyGdxGame game, Tuple3<Boolean,Boolean,Boolean> tuple2, BasicMiniGameScreen previousScreen){
         if (!isDelayed) {
-            ResultScreen screen = new ResultScreen(type,tuple2,game,previousScreen);
+            PuzzleResultScreen screen = new PuzzleResultScreen(type,tuple2,game,previousScreen);
             game.setScreen(screen);
         }
     }
@@ -167,7 +167,7 @@ public class Transition {
 
     public static void changeToResultScreen(BasicGameType type, MyGdxGame game, Tuple4<Boolean,Boolean,Boolean,Boolean> tuple2, BasicMiniGameScreen previousScreen){
         if (!isDelayed) {
-            ResultScreen screen = new ResultScreen(type,tuple2,game,previousScreen);
+            PuzzleResultScreen screen = new PuzzleResultScreen(type,tuple2,game,previousScreen);
             game.setScreen(screen);
         }
     }

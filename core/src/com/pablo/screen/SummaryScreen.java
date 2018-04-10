@@ -1,13 +1,14 @@
 package com.pablo.screen;
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.utils.Align;
 import com.pablo.game.MyGdxGame;
 import com.pablo.gameutils.BasicGameType;
+import com.pablo.gameutils.GameInfo;
+import com.pablo.gameutils.Tuple4;
 import com.pablo.input.SummaryScreenInput;
 
 
@@ -16,26 +17,19 @@ import com.pablo.input.SummaryScreenInput;
  * Created by Dennis on 29/03/2018.
  */
 
-public class SummaryScreen implements Screen {
+public class SummaryScreen extends AbstractResultClass {
 
     private int resultToBeDisplayed;
     private GestureDetector detector;
-    private Camera camera;
-    private SpriteBatch batch;
-    private MyGdxGame game;
-    private BasicGameType type;
+    private boolean resultsExist;
 
 
     public SummaryScreen(MyGdxGame game, BasicGameType type ){
 
+        super(game,type,type.getResults().isEmpty() ? new Tuple4<Boolean,Boolean,Boolean,Boolean>(false,false,false,false) : type.getResults().get(0));
+        resultsExist = !type.getResults().isEmpty();
         detector = new GestureDetector(new SummaryScreenInput(this));
         resultToBeDisplayed = 0;
-        this.game = game;
-        this.batch = game.getBatch();
-        this.camera = game.getCamera();
-        this.type = type;
-
-
 
     }
 
@@ -106,6 +100,23 @@ public class SummaryScreen implements Screen {
         }
         else if (resultToBeDisplayed<type.userResults.size()-1 && value>0){
             resultToBeDisplayed += value;
+        }
+
+        initializeRes(type.getResults().get(resultToBeDisplayed));
+        calc();
+    }
+
+    @Override
+    protected void drawText(SpriteBatch batch) {
+        if (resultsExist){
+            super.drawText(batch);
+            float deltaY = GameInfo.CAMERA_HEIGHT/10;
+            float initialX =GameInfo.CAMERA_WIDTH/8;
+            float initialY = GameInfo.CAMERA_HEIGHT*7/8;
+            drawFeedback(initialX,initialY -(deltaY*(modeSpecificMessages.length)),batch);
+        }
+        else {
+            fontLg.draw(batch,"There are no results to display", GameInfo.CAMERA_WIDTH,GameInfo.CAMERA_HEIGHT/2,GameInfo.CAMERA_WIDTH, Align.left,true);
         }
     }
 }

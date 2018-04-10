@@ -503,17 +503,20 @@ public class BasicMiniGameScreen implements Screen {
     }
 
     private void goToResultScreen(Tuple2<Boolean,Boolean> res){
+        gameStages.get(stageNo).addToResults(res);
         PuzzleResultScreen resScreen = new PuzzleResultScreen(gameStages.get(stageNo),res, game,this);
         game.setScreen(resScreen);
 
     }
 
     private void goToResultScreen(Tuple3<Boolean,Boolean,Boolean> res){
+        gameStages.get(stageNo).addToResults(res);
         PuzzleResultScreen resScreen = new PuzzleResultScreen(gameStages.get(stageNo),res, game,this);
         game.setScreen(resScreen);
     }
 
     private void goToResultScreen(Tuple4<Boolean,Boolean,Boolean,Boolean> res){
+        gameStages.get(stageNo).addToResults(res);
         PuzzleResultScreen resScreen = new PuzzleResultScreen(gameStages.get(stageNo),res, game,this);
         game.setScreen(resScreen);
     }

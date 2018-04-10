@@ -349,8 +349,6 @@ public class PuzzleResultScreen implements Screen {
 
 
         batch.setProjectionMatrix(camera.combined);
-
-
         batch.begin();
         drawText(batch);
         if (!displayHintSprite) nextSprite.draw(batch);
@@ -465,7 +463,7 @@ public class PuzzleResultScreen implements Screen {
     private void drawFeedback(float x, float y, SpriteBatch batch){
         String outputMessage = null;
         for(int i =0;i<modeSpecificFeedback.length;i++){
-            if (messages[i].equals("0")){
+            if (messages[i].equals("0")){//gets the most applicable feedback
                 outputMessage = modeSpecificFeedback[i];
                 break;
             }

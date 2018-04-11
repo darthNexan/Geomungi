@@ -56,7 +56,7 @@ public class LevelSelectionScreen implements Screen {
         this.batch = game.getBatch();
         this.camera = game.getCamera();
         this.game = game;
-        this.shapeRenderer = new ShapeRenderer();
+        this.shapeRenderer = game.getRenderer();
         switch (selectedScreen){// sets the input handler based on the screen type
             case Summary:
                 detector= new GestureDetector(new SelectSummaryScreenInput(this));
@@ -189,7 +189,7 @@ public class LevelSelectionScreen implements Screen {
 
     @Override
     public void dispose() {
-        shapeRenderer.dispose();
+        //shapeRenderer.dispose();
     }
 
 
@@ -255,6 +255,7 @@ public class LevelSelectionScreen implements Screen {
      */
     private void checkBackButton(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+            Gdx.app.log("check back button","Called");
             Transition.changeToMenuScreen(game,true);
             dispose();
         }

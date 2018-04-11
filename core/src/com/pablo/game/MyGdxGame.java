@@ -3,6 +3,7 @@ package com.pablo.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.pablo.gameutils.BasicGameType;
 import com.pablo.gameutils.Transition;
 import com.pablo.screen.LevelSelectionScreen;
@@ -13,7 +14,7 @@ public class MyGdxGame extends Game {
 	private  SpriteBatch batch;
 
 	private OrthographicCamera camera;
-
+	private ShapeRenderer renderer;
 
 	private ArrayList<BasicGameType> gameTypes;
 
@@ -31,6 +32,7 @@ public class MyGdxGame extends Game {
 
 		BasicGameType.getGameTypes();
 		batch = new SpriteBatch();
+		renderer = new ShapeRenderer();
 		camera = new OrthographicCamera(com.pablo.gameutils.GameInfo.CAMERA_WIDTH, com.pablo.gameutils.GameInfo.CAMERA_HEIGHT);
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
@@ -65,5 +67,7 @@ public class MyGdxGame extends Game {
 		return this.camera;
 	}//returns the camera to be used by all screens
 
-
+	public ShapeRenderer getRenderer(){
+		return renderer;
+	}
 }

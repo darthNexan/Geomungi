@@ -40,7 +40,7 @@ public class MenuScreen implements Screen {
     public MenuScreen(MyGdxGame game){
         this.game = game;
         batch = game.getBatch();
-        shapeRenderer = new ShapeRenderer();
+        shapeRenderer = game.getRenderer();
         camera = game.getCamera();
         font = Utilities.generateFont(6, Color.BLACK, Color.WHITE, 2f);
 
@@ -56,7 +56,7 @@ public class MenuScreen implements Screen {
                 new Rectangle(x - rectangleWidth/2, y - (rectangleHeight + 10f), rectangleWidth, rectangleHeight),
         };
 
-        Gdx.input.setInputProcessor(null);
+
 
     }
     /**
@@ -65,7 +65,7 @@ public class MenuScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setCatchBackKey(false);
-
+        Gdx.input.setInputProcessor(null);
     }
 
     /**
@@ -158,7 +158,7 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void dispose() {
-        shapeRenderer.dispose();
+//        shapeRenderer.dispose();
     }
 
 
@@ -166,19 +166,20 @@ public class MenuScreen implements Screen {
      * Called in the render loop and checks if the user interacts with the screen
      */
     private  void checkInput(){
-        float x =  Gdx.input.getX();
-        float y = Gdx.input.getY();
-        float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
-        float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
+        if(Gdx.input.justTouched()) {
+            float x = Gdx.input.getX();
+            float y = Gdx.input.getY();
+            float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
+            float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
 
-        if (textBoxes[0].contains(newX,newY)) {
-            Transition.changeToPuzzleSelectionScreen(game,true);
-            dispose();
-        }
-        else if (textBoxes[1].contains(newX,newY)) {
-            Transition.changeToSummarySelectionScreen(game,true);
-            dispose();
+            if (textBoxes[0].contains(newX, newY)) {
+                Transition.changeToPuzzleSelectionScreen(game, true);
+                dispose();
+            } else if (textBoxes[1].contains(newX, newY)) {
+                Transition.changeToSummarySelectionScreen(game, true);
+                dispose();
 
+            }
         }
     }
 }

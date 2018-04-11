@@ -89,7 +89,7 @@ public class BasicMiniGameScreen implements Screen {
         //setting up background
 
         this.batch= game.getBatch();
-        this.line1 = new ShapeRenderer();
+        this.line1 = game.getRenderer();
 
         setUpSprite();
 
@@ -417,7 +417,7 @@ public class BasicMiniGameScreen implements Screen {
 
     @Override
     public void dispose() {
-        line1.dispose();
+        //line1.dispose();
     }
 
     /**

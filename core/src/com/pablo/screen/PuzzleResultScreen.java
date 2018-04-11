@@ -72,7 +72,7 @@ public class PuzzleResultScreen implements Screen {
         this.type = type;
         generateBitmapFont();
         initSprites();
-        shapeRenderer = new ShapeRenderer();
+        shapeRenderer = game.getRenderer();
         readModeSpecificMessages();
 
     }
@@ -386,7 +386,7 @@ public class PuzzleResultScreen implements Screen {
     public void dispose() {
         fontLg.dispose();
         fontReg.dispose();
-        shapeRenderer.dispose();
+      //  shapeRenderer.dispose();
     }
 
     /**

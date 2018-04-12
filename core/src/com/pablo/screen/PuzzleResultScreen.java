@@ -384,7 +384,7 @@ public class PuzzleResultScreen implements Screen {
     public void dispose() {
         fontLg.dispose();
         fontReg.dispose();
-        shapeRenderer.dispose();
+        //shapeRenderer.dispose();
     }
 
     /**

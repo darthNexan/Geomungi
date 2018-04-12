@@ -402,6 +402,8 @@ public class ShapeGeneration {
     }
 
     /**
+     *
+     * TODO ensure that points are a min distance away from each other
      * Generates a generic shape given the number of points
      * @param sides
      * @return

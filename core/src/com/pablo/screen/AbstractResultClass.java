@@ -172,7 +172,7 @@ abstract public class AbstractResultClass implements Screen {
      */
 
     private void calcScoreRes1(){
-
+        if (tuple3==null) tuple3 = new Tuple3<Boolean, Boolean, Boolean>(false,false,false);
         messages = new String[4];
         score += tuple3.x1 ? 10:0;
         score += tuple3.x2 ? 10:0;
@@ -186,7 +186,7 @@ abstract public class AbstractResultClass implements Screen {
 
 
     private void calcScoreRes0(){
-
+        if (tuple2 == null) tuple2 = new Tuple2<Boolean, Boolean>(false,false);
         messages = new String[3];
         score += tuple2.x1? 10:0;
         messages[0] = Integer.toString(tuple2.x1? 10:0);
@@ -198,7 +198,7 @@ abstract public class AbstractResultClass implements Screen {
     }
 
     private void calcScoreSquare(){
-
+        if (tuple4==null) tuple4 = new Tuple4<Boolean, Boolean, Boolean, Boolean>(false,false,false,false);
         messages = new String[5];
         score += tuple4.x1?10:0;
         score += tuple4.x2?10:0;
@@ -215,6 +215,7 @@ abstract public class AbstractResultClass implements Screen {
     }
 
     private void calcScoreRect(){
+        if (tuple4 ==null) tuple4 = new Tuple4<Boolean, Boolean, Boolean, Boolean>(false,false,false,false);
         messages = new String[4];
         score += tuple4.x1?10:0;
         score += tuple4.x2?10:0;
@@ -230,7 +231,7 @@ abstract public class AbstractResultClass implements Screen {
     }
 
     private void calcScoreRhombus(){
-
+        if (tuple4==null) tuple4 = new Tuple4<Boolean, Boolean, Boolean, Boolean>(false,false,false,false);
         messages = new String[4];
         score += tuple4.x1?10:0;
         score += tuple4.x2?10:0;
@@ -246,7 +247,7 @@ abstract public class AbstractResultClass implements Screen {
 
 
     private void calcScoreParallelogram(){
-
+        if (tuple4==null) tuple4=new Tuple4<Boolean, Boolean, Boolean, Boolean>(false,false,false,false);
         messages = new String[3];
         score += tuple4.x1?10:0;
         score += tuple4.x2?10:0;

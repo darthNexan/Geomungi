@@ -260,8 +260,6 @@ public class BasicMiniGameScreen implements Screen {
                     genericTriangleRes = ShapeIdentification.checkShape(selectedPoints.firstElement(),basicGameType);
                 }
 
-                Gdx.app.log("Value of res", triangleRes.toString());
-
 
                 if (triangleRes !=null)
                     goToResultScreen(triangleRes);
@@ -417,7 +415,7 @@ public class BasicMiniGameScreen implements Screen {
 
     @Override
     public void dispose() {
-        line1.dispose();
+        ////line1.dispose();
     }
 
     /**

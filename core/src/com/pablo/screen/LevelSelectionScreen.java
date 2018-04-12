@@ -189,7 +189,7 @@ public class LevelSelectionScreen implements Screen {
 
     @Override
     public void dispose() {
-        shapeRenderer.dispose();
+//        shapeRenderer.dispose();
     }
 
 

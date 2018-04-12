@@ -158,7 +158,7 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void dispose() {
-        shapeRenderer.dispose();
+        //shapeRenderer.dispose();
     }
 
 
@@ -166,19 +166,21 @@ public class MenuScreen implements Screen {
      * Called in the render loop and checks if the user interacts with the screen
      */
     private  void checkInput(){
-        float x =  Gdx.input.getX();
-        float y = Gdx.input.getY();
-        float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
-        float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
+        if (Gdx.input.justTouched()) {
+            float x =  Gdx.input.getX();
+            float y = Gdx.input.getY();
+            float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
+            float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
 
-        if (textBoxes[0].contains(newX,newY)) {
-            Transition.changeToPuzzleSelectionScreen(game,true);
-            dispose();
-        }
-        else if (textBoxes[1].contains(newX,newY)) {
-            Transition.changeToSummarySelectionScreen(game,true);
-            dispose();
+            if (textBoxes[0].contains(newX,newY)) {
+                Transition.changeToPuzzleSelectionScreen(game,true);
+                dispose();
+            }
+            else if (textBoxes[1].contains(newX,newY)) {
+                Transition.changeToSummarySelectionScreen(game,true);
+                dispose();
 
+            }
         }
     }
 }

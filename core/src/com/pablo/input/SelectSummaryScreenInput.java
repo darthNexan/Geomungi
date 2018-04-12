@@ -35,18 +35,6 @@ public class SelectSummaryScreenInput implements GestureDetector.GestureListener
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
 
-        float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
-        float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
-        Rectangle[] boxes = screen.textBox;
-
-        Gdx.app.log("New Y", "" + newY);
-
-        for (int i = 0; i < boxes.length; i++ ){
-            if (boxes[i].contains(newX,newY)){
-                Transition.changeToSummaryScreen(i,screen.game,true);
-                break;
-            }
-        }
 
         return false;
     }
@@ -63,6 +51,21 @@ public class SelectSummaryScreenInput implements GestureDetector.GestureListener
      */
     @Override
     public boolean tap(float x, float y, int count, int button) {
+        float newX = abs(x * GameInfo.CAMERA_WIDTH / Gdx.graphics.getWidth());
+        float newY = GameInfo.CAMERA_HEIGHT - abs(y * GameInfo.CAMERA_HEIGHT / Gdx.graphics.getHeight());
+        Rectangle[] boxes = screen.textBox;
+
+        Gdx.app.log("New Y", "" + newY);
+
+        for (int i = 0; i < boxes.length; i++ ){
+            if (boxes[i].contains(newX,newY)){
+                Transition.changeToSummaryScreen(i,screen.game,true);
+                break;
+            }
+        }
+
+
+
         return false;
     }
 
@@ -94,6 +97,21 @@ public class SelectSummaryScreenInput implements GestureDetector.GestureListener
      */
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
+        Rectangle[] boxes = screen.textBox;
+        float firstBoxY = boxes[0].y + deltaY;
+        float lastBpxY = boxes[boxes.length-1].y + deltaY;
+
+        if (firstBoxY < (13*GameInfo.CAMERA_HEIGHT)/16 || lastBpxY > GameInfo.CAMERA_HEIGHT/16)
+            return false;
+
+        for (Rectangle aBox : boxes) {
+            aBox.y += deltaY;
+        }
+
+
+
+
+
         return false;
     }
 

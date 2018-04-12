@@ -168,7 +168,7 @@
       "A quadrilateral has four sides"
     ],
     "Labels":[
-      "Consists of a side of connected sides",
+      "Consists of a set of connected points",
       "Correct Number of sides"
     ],
     "Header":"Quadrilateral"
@@ -278,7 +278,7 @@
       "A pentagon has five sides"
     ],
     "Labels":[
-      "Consists of a side of connected sides",
+      "Consists of a set of connected points",
       "Correct Number of sides"
     ],
     "Header":"Pentagon"
@@ -292,7 +292,7 @@
       "A hexagon has six sides"
     ],
     "Labels":[
-      "Consists of a side of connected sides",
+      "Consists of a set of connected points",
       "Correct Number of sides"
     ],
     "Header":"Hexagon"
@@ -306,10 +306,10 @@
       "A septagon has seven sides"
     ],
     "Labels":[
-      "Consists of a side of connected sides",
+      "Consists of a set of connected points",
       "Correct Number of sides"
     ],
-    "Header":"Septagon"
+    "Header":"Heptagon"
   },
   { "category":1,
     "shapeType":8,
@@ -320,7 +320,7 @@
       "A octagon has eight sides"
     ],
     "Labels":[
-      "Consists of a side of connected sides",
+      "Consists of a set of connected points",
       "Correct Number of sides"
     ],
     "Header":"Octagon"
@@ -334,7 +334,7 @@
       "A nonagon has nine sides"
     ],
     "Labels":[
-      "Consists of a side of connected sides",
+      "Consists of a set of connected points",
       "Correct Number of sides"
     ],
     "Header":"Nonagon"
@@ -348,7 +348,7 @@
       "A decagon has ten sides"
     ],
     "Labels":[
-      "Consists of a side of connected sides",
+      "Consists of a set of connected points",
       "Correct Number of sides"
     ],
     "Header":"Decagon"

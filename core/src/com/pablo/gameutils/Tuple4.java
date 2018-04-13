@@ -7,27 +7,24 @@ import java.util.List;
  * Created by Dennis on 26/02/2018.
  */
 
+/*
+@startuml
+Tuple4<|-- Tuple
+class Tuple4<W,X,Y,Z>{
+x1:W
+x2:X
+x3:Y
+x4:Z
+}
+@enduml
+ */
+
 public class Tuple4 <W,X,Y,Z> extends Tuple{
     public final W x1;
     public final X x2;
     public final Y x3;
     public final Z x4;
 
-    public W getX1() {
-        return x1;
-    }
-
-    public X getX2() {
-        return x2;
-    }
-
-    public Y getX3() {
-        return x3;
-    }
-
-    public Z getX4() {
-        return x4;
-    }
 
     public Tuple4(W x1, X x2, Y x3, Z x4) {
 

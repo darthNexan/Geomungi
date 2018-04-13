@@ -6,7 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 /**
  * Created by Dennis on 19/02/2018.
  */
-
+/*
+* @startuml
+*
+* @enduml
+*
+* */
 public class UISprite extends Sprite {
 
 

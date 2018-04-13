@@ -3,6 +3,18 @@ package com.pablo.gameutils;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+@startuml
+
+Tuple3 <|-- Tuple
+class Tuple3<X,Y,Z>{
+x1:X
+x2:Y
+x3:Z
+
+}
+@enduml
+ */
 /**
  * Created by Dennis on 25/02/2018.
  */
